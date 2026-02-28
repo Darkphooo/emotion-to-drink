@@ -200,16 +200,27 @@ function selectMaterials(toneId) {
 function determineMethod(materialIds) {
   const materials = materialIds.map(id => getMaterialById(id));
 
-  if (materials.some(m => m.method === 'e1')) {
-    return 'e1';
-  }
+  const hasE1 = materials.some(m => m.method === 'e1');
+  const hasE3 = materials.some(m => m.method === 'e3');
+  const alcoholCount = materials.filter(m => m.type === 'mt1' || m.type === 'mt2').length;
 
-  const mt1Mt2Count = materials.filter(m => m.type === 'mt1' || m.type === 'mt2').length;
-  if (mt1Mt2Count > 1) {
-    return 'e2';
+  if (hasE1) {
+    if (hasE3) {
+      return 'e3';
+    } else {
+      return 'e1';
+    }
+  } else {
+    if (hasE3) {
+      return 'e4';
+    } else {
+      if (alcoholCount > 1) {
+        return 'e2';
+      } else {
+        return 'e1';
+      }
+    }
   }
-
-  return 'e3';
 }
 
 function selectAlcoholVolumeId(materialIds) {
@@ -242,8 +253,8 @@ function calculateTastePreference(currentTasteId, currentRefuseTasteIds, current
 
   if (secondaryTasteId && secondaryTasteId !== 'neutralize') {
     const targetLevel = secondaryTasteId === 't1' ? 'sourLevel' :
-                        secondaryTasteId === 't2' ? 'sweetLevel' :
-                        secondaryTasteId === 't3' ? 'bitterLevel' : 'spicyLevel';
+      secondaryTasteId === 't2' ? 'sweetLevel' :
+        secondaryTasteId === 't3' ? 'bitterLevel' : 'spicyLevel';
     tasteRatio[targetLevel] = numberToLevel(levelToNumber(tasteRatio[targetLevel]) + 1);
   } else if (secondaryTasteId === 'neutralize') {
     tasteRatio.sourLevel = 'h1';
@@ -377,7 +388,7 @@ function fillVolume(currentVolume, currentTotalVolume, usedMaterialIds) {
 
   if (total < currentTotalVolume) {
     const missingVolume = currentTotalVolume - total;
-    
+
     const existingMt4Id = Object.keys(currentVolume).find(id => {
       const m = materialData.find(mat => mat.id === id);
       return m && m.type === 'mt4';
@@ -421,7 +432,7 @@ function generateRecipeDetail(methodId, currentMaterialIds, currentVolume) {
   });
   const mt3Materials = currentMaterialIds.filter(id => {
     const m = getMaterialById(id);
-    return m && m.type === 'mt3';
+    return m && m.type === 'mt3' && id !== 'd15' && id !== 'd16';
   });
   const mt4Materials = currentMaterialIds.filter(id => {
     const m = getMaterialById(id);
@@ -449,12 +460,10 @@ function generateRecipeDetail(methodId, currentMaterialIds, currentVolume) {
 
   if (mt1Materials.length > 0) {
     const mt1Str = getMaterialStr('mt1');
-    if (method.id === 'e1') {
+    if (method.id === 'e1' || method.id === 'e3') {
       detail.push(`加入基酒 → ${mt1Str}，倒入摇壶底部`);
-    } else if (method.id === 'e2') {
+    } else if (method.id === 'e2' || method.id === 'e4') {
       detail.push(`加入基酒 → ${mt1Str}，放入调酒杯`);
-    } else if (method.id === 'e3') {
-      detail.push(`加入基酒 → ${mt1Str}，倒入杯中`);
     }
   }
 
@@ -464,28 +473,78 @@ function generateRecipeDetail(methodId, currentMaterialIds, currentVolume) {
   }
 
   if (method.id === 'e1' || method.id === 'e3') {
-    detail.push(`加入冰块 → 3块方冰`);
+    detail.push(`加入冰块 → 3块 方冰`);
     detail.push(`快速摇晃 → 10-15秒，高频`);
-  } else if (method.id === 'e2') {
-    detail.push(`加入冰块 → 4块方冰`);
+  } else if (method.id === 'e2' || method.id === 'e4') {
+    detail.push(`加入冰块 → 4块 方冰`);
     detail.push(`缓慢搅拌 → 20-30秒，单向`);
   }
 
-  if (mt3Materials.length > 0 || mt4Materials.length > 0) {
+  const mt4Shake = mt4Materials.filter(id => {
+    const m = getMaterialById(id);
+    return m && m.method === 'e1';
+  });
+  const mt4Build = mt4Materials.filter(id => {
+    const m = getMaterialById(id);
+    return m && m.method === 'e3';
+  });
+
+  if (mt3Materials.length > 0 || mt4Shake.length > 0) {
     const parts = [];
     if (mt3Materials.length > 0) parts.push(getMaterialStr('mt3'));
-    if (mt4Materials.length > 0 && method.id !== 'e3') parts.push(getMaterialStr('mt4'));
+    if (mt4Shake.length > 0) {
+      const shakeMt4Str = mt4Shake.map(id => {
+        const m = getMaterialById(id);
+        const vol = currentVolume[id] || 0;
+        const unit = m?.unit || 'ml';
+        return `${vol}${unit} ${m.name}`;
+      }).join(' + ');
+      parts.push(shakeMt4Str);
+    }
     if (parts.length > 0) {
       detail.push(`加入辅料 → ${parts.join(' + ')}`);
     }
   }
 
-  if (method.id === 'e3' && mt4Materials.length > 0) {
-    const mt4Str = getMaterialStr('mt4');
-    detail.push(`加入软饮 → ${mt4Str}，轻微搅拌1-2次`);
+  detail.push(`过滤倒出 → 进入成品杯`);
+
+  if ((method.id === 'e3' || method.id === 'e4') && mt4Build.length > 0) {
+    const buildMt4Str = mt4Build.map(id => {
+      const m = getMaterialById(id);
+      const vol = currentVolume[id] || 0;
+      const unit = m?.unit || 'ml';
+      return `${vol}${unit} ${m.name}`;
+    }).join(' + ');
+    detail.push(`加入软饮 → ${buildMt4Str}，轻微搅拌1-2次`);
   }
 
-  detail.push(`过滤倒出 → 进入成品杯`);
+  const d15Materials = currentMaterialIds.filter(id => id === 'd15');
+  const d16Materials = currentMaterialIds.filter(id => id === 'd16');
+
+  if (d15Materials.length > 0 || d16Materials.length > 0) {
+    const parts = [];
+    if (d15Materials.length > 0) {
+      const d15Str = d15Materials.map(id => {
+        const m = getMaterialById(id);
+        const vol = currentVolume[id] || 0;
+        const unit = m?.unit || 'ml';
+        return `${vol}${unit} ${m.name}`;
+      }).join(' + ');
+      parts.push(d15Str);
+    }
+    if (d16Materials.length > 0) {
+      const d16Str = d16Materials.map(id => {
+        const m = getMaterialById(id);
+        const vol = currentVolume[id] || 0;
+        const unit = m?.unit || 'ml';
+        return `${vol}${unit} ${m.name}`;
+      }).join(' + ');
+      parts.push(d16Str);
+    }
+    if (parts.length > 0) {
+      detail.push(`加入调味 → ${parts.join(' + ')}`);
+    }
+  }
 
   return detail;
 }
@@ -595,10 +654,10 @@ export async function calculateRecipe(emotionText, alcoholIndex, flavorPreferenc
   const currentMaterialRatio = getSourSweetRatio(currentTasteRatio.sourLevel, currentTasteRatio.sweetLevel);
 
   const hasSourOrSweet = currentMaterialIds.includes('d11') ||
-                         currentMaterialIds.includes('d12') ||
-                         currentMaterialIds.includes('d13') ||
-                         currentMaterialIds.includes('d14');
-  
+    currentMaterialIds.includes('d12') ||
+    currentMaterialIds.includes('d13') ||
+    currentMaterialIds.includes('d14');
+
   if (hasSourOrSweet) {
     const sourLevel = levelToNumber(currentTasteRatio.sourLevel);
     const sweetLevel = levelToNumber(currentTasteRatio.sweetLevel);
@@ -629,9 +688,9 @@ export async function calculateRecipe(emotionText, alcoholIndex, flavorPreferenc
         currentVolume[id] = 0;
       }
     }
-    
+
     const processedVolume = allocateSourSweetVolume(currentVolume, currentMaterialRatio, currentOtherVolume);
-    
+
     for (const [key, val] of Object.entries(processedVolume)) {
       currentVolume[key] = val;
     }
@@ -664,6 +723,41 @@ export async function calculateRecipe(emotionText, alcoholIndex, flavorPreferenc
     if (m && m.unit === 'ml') {
       const vol = finalVolume[id];
       finalVolume[id] = Math.round(vol / 5) * 5;
+    }
+  }
+
+  let mt4TotalVolume = 0;
+  for (const id of currentMaterialIds) {
+    const m = getMaterialById(id);
+    if (m && m.type === 'mt4') {
+      mt4TotalVolume += finalVolume[id] || 0;
+    }
+  }
+
+  if (mt4TotalVolume < 20) {
+    const missingVolume = 20 - mt4TotalVolume;
+    
+    const mt4WithZeroVolume = currentMaterialIds.filter(id => {
+      const m = getMaterialById(id);
+      return m && m.type === 'mt4' && finalVolume[id] === 0;
+    });
+
+    if (mt4WithZeroVolume.length > 0) {
+      const addVolume = Math.ceil(missingVolume / mt4WithZeroVolume.length / 5) * 5;
+      for (const id of mt4WithZeroVolume) {
+        finalVolume[id] = addVolume;
+      }
+    } else {
+      const allMt4 = currentMaterialIds.filter(id => {
+        const m = getMaterialById(id);
+        return m && m.type === 'mt4';
+      });
+      if (allMt4.length > 0) {
+        const addVolume = Math.ceil(missingVolume / allMt4.length / 5) * 5;
+        for (const id of allMt4) {
+          finalVolume[id] = (finalVolume[id] || 0) + addVolume;
+        }
+      }
     }
   }
 

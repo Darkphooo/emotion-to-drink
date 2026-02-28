@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="page-container fixed-height">
     <h1 class="page-title">今晚，你愿意走到哪一步？</h1>
     <p class="page-subtitle">
       不用考虑数字，只选择你能接受的感觉。

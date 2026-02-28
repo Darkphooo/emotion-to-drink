@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="page-container fixed-height">
     <h1 class="page-title">这杯酒，你希望哪种味道更明显一点？</h1>
     <p class="page-subtitle">
       可以选一个方向，并选择强度。如果有特别不想要的味道，可以长按划掉。
@@ -19,13 +19,6 @@
       >
         <span class="flavor-emoji">{{ flavor.emoji }}</span>
         <span class="flavor-text">{{ flavor.text }}</span>
-        <button
-          v-if="crossedFlavors.includes(flavor.id)"
-          class="cross-btn"
-          @click.stop="handleUncross(flavor.id)"
-        >
-          ✕
-        </button>
       </div>
     </div>
 

@@ -25,24 +25,37 @@
       "缓慢搅拌 → 20-30 秒，单向",
       "过滤倒出 → 成品杯"
     ],
-    "alcoholVolume": "alcoholContent / 100 * totalVolume * 1.15",
-    "note": "总液体体积为固定量，最终机器产出的数据之和相加为120ml，同时等比例缩放至90ml和150ml"
+    "alcoholVolume": "alcoholContent / 100 * totalVolume * 1.15"
   },
   {
     "id": "e3",
-    "name": "build",
+    "name": "shakeBuild",
     "totalVolume": "180",
     "detail": [
       "加入mt1 → 倒入摇壶底部",
       "加入mt2",
-      "加入mt3和mt4",
+      "加入mt3和shake的mt4",
       "加入冰块 → 3块方冰",
       "快速摇晃 → 10-15 秒，高频",
       "过滤倒出 → 进入成品杯",
       "加入build的mt4",
       "轻微搅拌 1-2 次"
     ],
-    "alcoholVolume": "alcoholContent / 100 * totalVolume * 1.15",
-    "note": "总液体体积为固定量，最终机器产出的数据之和相加为180ml，同时等比例缩放至150ml和210ml"
+    "alcoholVolume": "alcoholContent / 100 * totalVolume * 1.15"
+  },
+  {
+    "id": "e4",
+    "name": "stirBuild",
+    "totalVolume": "180",
+    "detail": [
+      "加入mt1 → 放入调酒杯",
+      "加入mt2",
+      "加入冰块 → 4块方冰",
+      "缓慢搅拌 → 20-30 秒，单向",
+      "过滤倒出 → 成品杯",
+      "加入build的mt4",
+      "轻微搅拌 1-2 次"
+    ],
+    "alcoholVolume": "alcoholContent / 100 * totalVolume * 1.15"
   }
 ]

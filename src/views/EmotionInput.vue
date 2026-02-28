@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="page-container fixed-height">
     <h1 class="page-title">今晚，你希望这杯酒陪你走进什么样的片刻？</h1>
     <p class="page-subtitle">
       可以写一句完整的话。比如：<br>
