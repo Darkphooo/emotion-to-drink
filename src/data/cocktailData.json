@@ -1,0 +1,64 @@
+{
+  "emotions": [
+    { "id": "e1", "name": "放松", "keywords": ["放松", "轻松", "悠闲", "慢", "休息"] },
+    { "id": "e2", "name": "愉悦", "keywords": ["开心", "快乐", "高兴", "庆祝", "兴奋"] },
+    { "id": "e3", "name": "平静", "keywords": ["平静", "安静", "放松", "舒缓", "安宁"] },
+    { "id": "e4", "name": "忧郁", "keywords": ["忧郁", "难过", "伤心", "失落", "沮丧"] },
+    { "id": "e5", "name": "思念", "keywords": ["思念", "想", "怀念", "回忆", "孤单"] },
+    { "id": "e6", "name": "浪漫", "keywords": ["浪漫", "甜蜜", "温馨", "约会", "美好"] },
+    { "id": "e7", "name": "释放", "keywords": ["释放", "放纵", "疯狂", "尽兴", "疯狂"] },
+    { "id": "e8", "name": "疲惫", "keywords": ["疲惫", "累", "困", "放松", "休息"] },
+    { "id": "e9", "name": "压力", "keywords": ["压力", "紧张", "焦虑", "烦恼", "心事"] },
+    { "id": "e10", "name": "孤独", "keywords": ["孤独", "一个人", "独自", "寂寞", "陪伴"] },
+    { "id": "e11", "name": "欢聚", "keywords": ["聚会", "朋友", "热闹", "欢聚", "畅饮"] },
+    { "id": "e12", "name": "期待", "keywords": ["期待", "兴奋", "希望", "憧憬", "向往"] },
+    { "id": "e13", "name": "沉思", "keywords": ["沉思", "思考", "安静", "独处", "回味"] },
+    { "id": "e14", "name": "微醺", "keywords": ["微醺", "醺醺", "轻盈", "飘", "轻松"] }
+  ],
+  "combinations": [
+    { "id": "c1", "emotions": ["放松", "愉悦"], "toneId": "t1" },
+    { "id": "c2", "emotions": ["平静", "思念"], "toneId": "t2" },
+    { "id": "c3", "emotions": ["忧郁", "孤独"], "toneId": "t3" },
+    { "id": "c4", "emotions": ["浪漫", "期待"], "toneId": "t4" },
+    { "id": "c5", "emotions": ["释放", "欢聚"], "toneId": "t5" },
+    { "id": "c6", "emotions": ["疲惫", "压力"], "toneId": "t6" }
+  ],
+  "tones": [
+    { "id": "t1", "name": "阳光清爽", "description": "清新明亮的口感，适合放松愉悦的心情", "ingredients": ["i1", "i5", "i10"] },
+    { "id": "t2", "name": "温柔回忆", "description": "柔和甜美的风味，伴随淡淡的思绪", "ingredients": ["i2", "i6", "i11"] },
+    { "id": "t3", "name": "深邃忧郁", "description": "复杂深沉的味道，品味人生况味", "ingredients": ["i3", "i7", "i12"] },
+    { "id": "t4", "name": "浪漫甜蜜", "description": "甜美浪漫的氛围，爱情的滋味", "ingredients": ["i2", "i8", "i13"] },
+    { "id": "t5", "name": "热烈狂欢", "description": "热烈奔放的口感，释放激情", "ingredients": ["i4", "i9", "i14"] },
+    { "id": "t6", "name": "宁静休憩", "description": "柔和舒缓的味道，抚慰疲惫心灵", "ingredients": ["i1", "i6", "i10"] }
+  ],
+  "ingredients": [
+    { "id": "i1", "name": "伏特加", "type": "base", "abv": 40, "flavorTags": [], "flavorLevels": {} },
+    { "id": "i2", "name": "金酒", "type": "base", "abv": 40, "flavorTags": ["botanical"], "flavorLevels": {} },
+    { "id": "i3", "name": "威士忌", "type": "base", "abv": 40, "flavorTags": ["smoky"], "flavorLevels": { "bitter": 1 } },
+    { "id": "i4", "name": "龙舌兰", "type": "base", "abv": 38, "flavorTags": ["earthy"], "flavorLevels": { "spicy": 1 } },
+    { "id": "i5", "name": "白朗姆", "type": "base", "abv": 40, "flavorTags": ["light"], "flavorLevels": {} },
+    { "id": "i6", "name": "君度", "type": "liqueur", "abv": 40, "flavorTags": ["sweet"], "flavorLevels": { "sweet": 2 } },
+    { "id": "i7", "name": "味美思", "type": "liqueur", "abv": 16, "flavorTags": ["herbal", "sweet"], "flavorLevels": { "sweet": 1, "bitter": 1 } },
+    { "id": "i8", "name": "草莓利口酒", "type": "liqueur", "abv": 20, "flavorTags": ["sweet", "fruit"], "flavorLevels": { "sweet": 2 } },
+    { "id": "i9", "name": "辣椒利口酒", "type": "liqueur", "abv": 30, "flavorTags": ["spicy"], "flavorLevels": { "spicy": 2 } },
+    { "id": "i10", "name": "柠檬汁", "type": "mixer", "abv": 0, "flavorTags": ["sour"], "flavorLevels": { "sour": 2 } },
+    { "id": "i11", "name": "糖浆", "type": "mixer", "abv": 0, "flavorTags": ["sweet"], "flavorLevels": { "sweet": 2 } },
+    { "id": "i12", "name": "苦精", "type": "bitter", "abv": 45, "flavorTags": ["bitter"], "flavorLevels": { "bitter": 3 }, "unit": "drops" },
+    { "id": "i13", "name": "奶油", "type": "mixer", "abv": 0, "flavorTags": ["sweet", "creamy"], "flavorLevels": { "sweet": 1 } },
+    { "id": "i14", "name": " Tabasco", "type": "bitter", "abv": 0, "flavorTags": ["spicy"], "flavorLevels": { "spicy": 3 }, "unit": "drops" },
+    { "id": "i15", "name": "苏打水", "type": "soft", "abv": 0, "flavorTags": ["light"], "flavorLevels": {} },
+    { "id": "i16", "name": "橙汁", "type": "soft", "abv": 0, "flavorTags": ["fruit", "sweet"], "flavorLevels": { "sweet": 1 } }
+  ],
+  "alcoholRanges": [
+    { "id": "r1", "name": "轻度", "minAbv": 5, "maxAbv": 10, "multiplier": 1.5 },
+    { "id": "r2", "name": "微醺", "minAbv": 10, "maxAbv": 15, "multiplier": 1.23 },
+    { "id": "r3", "name": "有感", "minAbv": 15, "maxAbv": 25, "multiplier": 1.23 },
+    { "id": "r4", "name": "上头", "minAbv": 25, "maxAbv": 30, "multiplier": 1.23 },
+    { "id": "r5", "name": "强劲", "minAbv": 30, "maxAbv": 40, "multiplier": 1.23 }
+  ],
+  "methods": [
+    { "id": "m1", "name": "Shake", "description": "摇匀", "suitableFor": ["light", "fruit", "sour"] },
+    { "id": "m2", "name": "Stir", "description": "搅拌", "suitableFor": ["botanical", "smoky", "herbal"] },
+    { "id": "m3", "name": "Build", "description:": "直接调匀", "suitableFor": ["light", "soft"] }
+  ]
+}

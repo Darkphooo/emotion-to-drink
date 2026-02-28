@@ -1,0 +1,29 @@
+[
+  {
+    "id": "av1",
+    "alcohol": {
+      "mt1": 1,
+      "mt2": 0
+    },
+    "mt1Volume": "alcoholVolume / mt1AlcoholContent",
+    "mt2Volume": "0"
+  },
+  {
+    "id": "av2",
+    "alcohol": {
+      "mt1": 2,
+      "mt2": 1
+    },
+    "mt1Volume": "alcoholVolume / (mt1AlcoholContent + mt2AlcoholContent / 2)",
+    "mt2Volume": "mt1Volume / 2"
+  },
+  {
+    "id": "av3",
+    "alcohol": {
+      "mt1": 3,
+      "mt2": 1
+    },
+    "mt1Volume": "alcoholVolume / (mt1AlcoholContent + mt2AlcoholContent / 3)",
+    "mt2Volume": "mt1Volume / 3"
+  }
+]

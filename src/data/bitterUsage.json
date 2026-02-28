@@ -1,0 +1,18 @@
+{
+  "h0": {
+    "material": null,
+    "usage": 0
+  },
+  "h1": {
+    "material": "d16",
+    "usage": 2
+  },
+  "h2": {
+    "material": "d16",
+    "usage": 3
+  },
+  "h3": {
+    "material": "d16",
+    "usage": 6
+  }
+}

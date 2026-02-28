@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "id": "i1",
+      "sourLevel": "1",
+      "sweetLevel": "1",
+      "materialRatio": "1.5:1"
+    },
+    {
+      "id": "i2",
+      "sourLevel": "2",
+      "sweetLevel": "2",
+      "materialRatio": "1.5:1"
+    },
+    {
+      "id": "i3",
+      "sourLevel": "2",
+      "sweetLevel": "1",
+      "materialRatio": "2:1"
+    },
+    {
+      "id": "i4",
+      "sourLevel": "3",
+      "sweetLevel": "1",
+      "materialRatio": "3:1"
+    },
+    {
+      "id": "i5",
+      "sourLevel": "1",
+      "sweetLevel": "2",
+      "materialRatio": "1.5:2"
+    },
+    {
+      "id": "i6",
+      "sourLevel": "1",
+      "sweetLevel": "3",
+      "materialRatio": "1:2"
+    }
+  ],
+  "comment": [
+    "materialRatio=(d11+d12)/(d13+d14)",
+    "d11+d12>=10",
+    "d13+d14>=10",
+    "d11+d12+d13+d14<alcoholVolume"
+  ]
+}

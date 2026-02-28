@@ -1,0 +1,82 @@
+{
+  "t1": {
+    "h1": {
+      "sourLevel": "h2",
+      "sweetLevel": "h1",
+      "bitterLevel": "h0",
+      "spicyLevel": "h0"
+    },
+    "h2": {
+      "sourLevel": "h2",
+      "sweetLevel": "h1",
+      "bitterLevel": "h1",
+      "spicyLevel": "h0"
+    },
+    "h3": {
+      "sourLevel": "h3",
+      "sweetLevel": "h1",
+      "bitterLevel": "h1",
+      "spicyLevel": "h0"
+    }
+  },
+  "t2": {
+    "h1": {
+      "sourLevel": "h1",
+      "sweetLevel": "h2",
+      "bitterLevel": "h0",
+      "spicyLevel": "h0"
+    },
+    "h2": {
+      "sourLevel": "h1",
+      "sweetLevel": "h2",
+      "bitterLevel": "h0",
+      "spicyLevel": "h0"
+    },
+    "h3": {
+      "sourLevel": "h1",
+      "sweetLevel": "h3",
+      "bitterLevel": "h0",
+      "spicyLevel": "h0"
+    }
+  },
+  "t3": {
+    "h1": {
+      "sourLevel": "h1",
+      "sweetLevel": "h1",
+      "bitterLevel": "h1",
+      "spicyLevel": "h0"
+    },
+    "h2": {
+      "sourLevel": "h1",
+      "sweetLevel": "h1",
+      "bitterLevel": "h2",
+      "spicyLevel": "h0"
+    },
+    "h3": {
+      "sourLevel": "h1",
+      "sweetLevel": "h1",
+      "bitterLevel": "h3",
+      "spicyLevel": "h0"
+    }
+  },
+  "t4": {
+    "h1": {
+      "sourLevel": "h1",
+      "sweetLevel": "h1",
+      "bitterLevel": "h0",
+      "spicyLevel": "h1"
+    },
+    "h2": {
+      "sourLevel": "h1",
+      "sweetLevel": "h1",
+      "bitterLevel": "h0",
+      "spicyLevel": "h2"
+    },
+    "h3": {
+      "sourLevel": "h1",
+      "sweetLevel": "h1",
+      "bitterLevel": "h0",
+      "spicyLevel": "h3"
+    }
+  }
+}

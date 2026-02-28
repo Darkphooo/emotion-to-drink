@@ -1,0 +1,74 @@
+[
+  {
+    "id": "a1",
+    "name": "cheerful",
+    "type": "positive",
+    "note": ""
+  },
+  {
+    "id": "a2",
+    "name": "excited",
+    "type": "positive",
+    "note": ""
+  },
+  {
+    "id": "a3",
+    "name": "relaxed",
+    "type": "positive",
+    "note": ""
+  },
+  {
+    "id": "a4",
+    "name": "sad",
+    "type": "negative",
+    "note": ""
+  },
+  {
+    "id": "a5",
+    "name": "frustrated",
+    "type": "negative",
+    "note": ""
+  },
+  {
+    "id": "a6",
+    "name": "anxious",
+    "type": "negative",
+    "note": ""
+  },
+  {
+    "id": "a7",
+    "name": "content",
+    "type": "netural",
+    "note": ""
+  },
+  {
+    "id": "a8",
+    "name": "calm",
+    "type": "netural",
+    "note": ""
+  },
+  {
+    "id": "a9",
+    "name": "balanced",
+    "type": "netural",
+    "note": ""
+  },
+  {
+    "id": "a10",
+    "name": "conflicted",
+    "type": "complex",
+    "note": ""
+  },
+  {
+    "id": "a11",
+    "name": "adventurous",
+    "type": "complex",
+    "note": ""
+  },
+  {
+    "id": "a12",
+    "name": "nostalgic",
+    "type": "complex",
+    "note": ""
+  }
+]

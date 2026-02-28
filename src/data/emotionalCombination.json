@@ -1,0 +1,106 @@
+[
+  {
+    "id": "b1",
+    "emotionalCombination": {
+      "primary": "a4",
+      "secondary": "a10"
+    },
+    "note": "情绪低落、内在拉扯"
+  },
+  {
+    "id": "b2",
+    "emotionalCombination": {
+      "primary": "a5",
+      "secondary": "a10"
+    },
+    "note": "受挫、矛盾"
+  },
+  {
+    "id": "b3",
+    "emotionalCombination": {
+      "primary": "a6",
+      "secondary": "a10"
+    },
+    "note": "焦虑、不确定"
+  },
+  {
+    "id": "b4",
+    "emotionalCombination": {
+      "primary": "a4",
+      "secondary": "a12"
+    },
+    "note": "怀旧偏伤感"
+  },
+  {
+    "id": "b5",
+    "emotionalCombination": {
+      "primary": "a2",
+      "secondary": "a11"
+    },
+    "note": "兴奋、想尝试"
+  },
+  {
+    "id": "b6",
+    "emotionalCombination": {
+      "primary": "a1",
+      "secondary": "a11"
+    },
+    "note": "愉快、探索"
+  },
+  {
+    "id": "b7",
+    "emotionalCombination": {
+      "primary": "a3",
+      "secondary": "a11"
+    },
+    "note": "轻松状态下的冒险"
+  },
+  {
+    "id": "b8",
+    "emotionalCombination": {
+      "primary": "a3",
+      "secondary": "a12"
+    },
+    "note": "放松、温和回忆"
+  },
+  {
+    "id": "b9",
+    "emotionalCombination": {
+      "primary": "a7",
+      "secondary": "a10"
+    },
+    "note": "表面满足、内在纠结"
+  },
+  {
+    "id": "b10",
+    "emotionalCombination": {
+      "primary": "a9",
+      "secondary": "a10"
+    },
+    "note": "理性平衡、拉扯"
+  },
+  {
+    "id": "b11",
+    "emotionalCombination": {
+      "primary": "a7",
+      "secondary": "a11"
+    },
+    "note": "稳定状态下想尝试"
+  },
+  {
+    "id": "b12",
+    "emotionalCombination": {
+      "primary": "a8",
+      "secondary": "a12"
+    },
+    "note": "平静、回忆"
+  },
+  {
+    "id": "b13",
+    "emotionalCombination": {
+      "primary": "a7",
+      "secondary": "a12"
+    },
+    "note": "满足、怀旧"
+  }
+]

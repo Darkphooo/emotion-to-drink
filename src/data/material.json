@@ -1,0 +1,212 @@
+[
+  {
+    "id": "d1",
+    "name": "龙舌兰",
+    "type": "mt1",
+    "method": null,
+    "alcohol": "40",
+    "taste": null,
+    "tasteLevel": null,
+    "unit": "ml"
+  },
+  {
+    "id": "d2",
+    "name": "伏特加",
+    "type": "mt1",
+    "method": null,
+    "alcohol": "40",
+    "taste": null,
+    "tasteLevel": null,
+    "unit": "ml"
+  },
+  {
+    "id": "d3",
+    "name": "金酒",
+    "type": "mt1",
+    "method": null,
+    "alcohol": "40",
+    "taste": null,
+    "tasteLevel": null,
+    "unit": "ml"
+  },
+  {
+    "id": "d4",
+    "name": "朗姆",
+    "type": "mt1",
+    "method": null,
+    "alcohol": "40",
+    "taste": null,
+    "tasteLevel": null,
+    "unit": "ml"
+  },
+  {
+    "id": "d5",
+    "name": "威士忌",
+    "type": "mt1",
+    "method": null,
+    "alcohol": "40",
+    "taste": null,
+    "tasteLevel": null,
+    "unit": "ml"
+  },
+  {
+    "id": "d6",
+    "name": "白兰地",
+    "type": "mt1",
+    "method": null,
+    "alcohol": "40",
+    "taste": null,
+    "tasteLevel": null,
+    "unit": "ml"
+  },
+  {
+    "id": "d7",
+    "name": "君度",
+    "type": "mt2",
+    "method": null,
+    "alcohol": "40",
+    "taste": "t2",
+    "tasteLevel": "h1",
+    "unit": "ml"
+  },
+  {
+    "id": "d8",
+    "name": "百利甜",
+    "type": "mt2",
+    "method": "e1",
+    "alcohol": "17",
+    "taste": "t2",
+    "tasteLevel": "h2",
+    "unit": "ml"
+  },
+  {
+    "id": "d9",
+    "name": "金巴利",
+    "type": "mt2",
+    "method": null,
+    "alcohol": "25",
+    "taste": "t3",
+    "tasteLevel": "h1",
+    "unit": "ml"
+  },
+  {
+    "id": "d10",
+    "name": "甜苦艾酒",
+    "type": "mt2",
+    "method": null,
+    "alcohol": "16",
+    "taste": "t3",
+    "tasteLevel": "h2",
+    "unit": "ml"
+  },
+  {
+    "id": "d11",
+    "name": "黄柠檬汁",
+    "type": "mt3",
+    "method": "e1",
+    "alcohol": "0",
+    "taste": "t1",
+    "tasteLevel": "h0",
+    "unit": "ml"
+  },
+  {
+    "id": "d12",
+    "name": "青柠汁",
+    "type": "mt3",
+    "method": "e1",
+    "alcohol": "0",
+    "taste": "t1",
+    "tasteLevel": "h0",
+    "unit": "ml"
+  },
+  {
+    "id": "d13",
+    "name": "原味糖浆",
+    "type": "mt3",
+    "method": "e1",
+    "alcohol": "0",
+    "taste": "t2",
+    "tasteLevel": "h0",
+    "unit": "ml"
+  },
+  {
+    "id": "d14",
+    "name": "红石榴糖浆",
+    "type": "mt3",
+    "method": "e1",
+    "alcohol": "0",
+    "taste": "t2",
+    "tasteLevel": "h0",
+    "unit": "ml"
+  },
+  {
+    "id": "d15",
+    "name": "辣椒仔",
+    "type": "mt3",
+    "method": null,
+    "alcohol": "0",
+    "taste": "t4",
+    "tasteLevel": "h0",
+    "unit": "滴"
+  },
+  {
+    "id": "d16",
+    "name": "苦精",
+    "type": "mt3",
+    "method": null,
+    "alcohol": "0",
+    "taste": "t3",
+    "tasteLevel": "h0",
+    "unit": "滴"
+  },
+  {
+    "id": "d17",
+    "name": "汤力水",
+    "type": "mt4",
+    "method": "e3",
+    "alcohol": "0",
+    "taste": null,
+    "tasteLevel": null,
+    "unit": "ml"
+  },
+  {
+    "id": "d18",
+    "name": "苏打水",
+    "type": "mt4",
+    "method": "e3",
+    "alcohol": "0",
+    "taste": null,
+    "tasteLevel": null,
+    "unit": "ml"
+  },
+  {
+    "id": "d19",
+    "name": "可乐",
+    "type": "mt4",
+    "method": "e3",
+    "alcohol": "0",
+    "taste": "t2",
+    "tasteLevel": "h2",
+    "unit": "ml"
+  },
+  {
+    "id": "d20",
+    "name": "鲜榨橙汁",
+    "type": "mt4",
+    "method": "e1",
+    "alcohol": "0",
+    "taste": "t2",
+    "tasteLevel": "h1",
+    "unit": "ml"
+  },
+  {
+    "id": "d21",
+    "name": "菠萝汁",
+    "type": "mt4",
+    "method": "e1",
+    "alcohol": "0",
+    "taste": "t2",
+    "tasteLevel": "h1",
+    "unit": "ml"
+  }
+]

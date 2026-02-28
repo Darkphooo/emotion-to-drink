@@ -1,0 +1,26 @@
+[
+  {
+    "id": "g1",
+    "lowestAlcoholContent": 5,
+    "highestAlcoholContent": 10,
+    "description": "conservative"
+  },
+  {
+    "id": "g2",
+    "lowestAlcoholContent": 10,
+    "highestAlcoholContent": 15,
+    "description": "mild"
+  },
+  {
+    "id": "g3",
+    "description": "netural",
+    "lowestAlcoholContent": 15,
+    "highestAlcoholContent": 25
+  },
+  {
+    "id": "g4",
+    "description": "stimulating",
+    "lowestAlcoholContent": 25,
+    "highestAlcoholContent": 30
+  }
+]
