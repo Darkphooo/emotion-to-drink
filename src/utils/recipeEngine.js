@@ -93,6 +93,99 @@ function randomChoice(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function calculatePureAlcoholBounds(totalVolume, minAlcoholPercent, maxAlcoholPercent) {
+  return {
+    minPureAlcohol: totalVolume * minAlcoholPercent / 100,
+    maxPureAlcohol: totalVolume * maxAlcoholPercent / 100
+  };
+}
+
+function calculateMtVolumesByAlcoholVolumeId(pureAlcohol, alcoholVolumeId, mt1AlcoholContent, mt2AlcoholContent = 0) {
+  if (alcoholVolumeId === 'av1') {
+    return {
+      mt1Volume: pureAlcohol / mt1AlcoholContent,
+      mt2Volume: 0
+    };
+  } else if (alcoholVolumeId === 'av2') {
+    const mt1Volume = pureAlcohol / (mt1AlcoholContent + mt2AlcoholContent / 2);
+    return {
+      mt1Volume,
+      mt2Volume: mt1Volume / 2
+    };
+  } else if (alcoholVolumeId === 'av3') {
+    const mt1Volume = pureAlcohol / (mt1AlcoholContent + mt2AlcoholContent / 3);
+    return {
+      mt1Volume,
+      mt2Volume: mt1Volume / 3
+    };
+  }
+  return { mt1Volume: 0, mt2Volume: 0 };
+}
+
+function alignVolumesToFiveMultiples(volumes, totalVolume, targetPureAlcohol, getAlcoholContentFn) {
+  const entries = Object.entries(volumes).map(([id, vol]) => ({ id, volume: vol }));
+  entries.sort((a, b) => b.volume - a.volume);
+
+  const roundToFive = (n) => Math.max(0, Math.round(n / 5) * 5);
+
+  const currentVolumes = {};
+  for (const e of entries) {
+    currentVolumes[e.id] = roundToFive(e.volume);
+  }
+
+  let currentTotal = Object.values(currentVolumes).reduce((sum, v) => sum + v, 0);
+
+  if (currentTotal === totalVolume) {
+    let pureAlcohol = 0;
+    for (const e of entries) {
+      const alcoholContent = getAlcoholContentFn(e.id);
+      if (alcoholContent !== null) {
+        pureAlcohol += currentVolumes[e.id] * alcoholContent;
+      }
+    }
+    return { volumes: currentVolumes, pureAlcohol };
+  }
+
+  const diff = totalVolume - currentTotal;
+  
+  if (entries.length > 0 && diff > 0) {
+    const alcoholEntries = entries.filter(e => {
+      const alcoholContent = getAlcoholContentFn(e.id);
+      return alcoholContent && alcoholContent > 0;
+    });
+
+    if (alcoholEntries.length > 0) {
+      let volumeToAdd = roundToFive(diff / alcoholEntries.length) * alcoholEntries.length;
+      for (let i = 0; i < alcoholEntries.length && volumeToAdd > 0; i++) {
+        const addAmount = Math.min(5, volumeToAdd);
+        alcoholEntries[i].volume += addAmount;
+        volumeToAdd -= addAmount;
+      }
+    } else {
+      entries[0].volume += diff;
+    }
+  }
+
+  const newVolumes = {};
+  for (const e of entries) {
+    newVolumes[e.id] = roundToFive(e.volume);
+  }
+
+  let pureAlcohol = 0;
+  for (const e of entries) {
+    const alcoholContent = getAlcoholContentFn(e.id);
+    if (alcoholContent !== null) {
+      pureAlcohol += newVolumes[e.id] * alcoholContent;
+    }
+  }
+
+  return { volumes: newVolumes, pureAlcohol };
+}
+
+function calculateActualAlcoholPercent(pureAlcoholVolume, totalVolume) {
+  return (pureAlcoholVolume / totalVolume) * 100;
+}
+
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -578,21 +671,21 @@ export async function calculateRecipe(emotionText, alcoholIndex, flavorPreferenc
   const currentMethodId = determineMethod(currentMaterialIds);
 
   const alcoholRange = getAlcoholContentRangeById(alcoholIndex) || getAlcoholContentRangeById('g2');
-  const alcoholContent = randomInt(alcoholRange.lowestAlcoholContent, alcoholRange.highestAlcoholContent);
+  const minAlcoholPercent = alcoholRange.lowestAlcoholContent;
+  const maxAlcoholPercent = alcoholRange.highestAlcoholContent;
 
   const method = getMethodById(currentMethodId);
   const currentTotalVolume = parseInt(method.totalVolume);
 
-  const currentAlcoholVolume = evaluateFormula(method.alcoholVolume, {
-    alcoholContent: alcoholContent,
-    totalVolume: currentTotalVolume
-  });
+  const { minPureAlcohol, maxPureAlcohol } = calculatePureAlcoholBounds(
+    currentTotalVolume,
+    minAlcoholPercent,
+    maxAlcoholPercent
+  );
 
-  const currentOtherVolume = currentTotalVolume - currentAlcoholVolume;
+  const targetPureAlcohol = minPureAlcohol + Math.random() * (maxPureAlcohol - minPureAlcohol);
 
   const currentAlcoholVolumeId = selectAlcoholVolumeId(currentMaterialIds);
-
-  const alcoholVolumeDataItem = getAlcoholVolumeById(currentAlcoholVolumeId);
 
   const mt1Materials = currentMaterialIds.filter(id => {
     const m = getMaterialById(id);
@@ -603,31 +696,21 @@ export async function calculateRecipe(emotionText, alcoholIndex, flavorPreferenc
     return m && m.type === 'mt2';
   });
 
-  let mt1Volume = 0;
-  let mt2Volume = 0;
+  const mt1Material = mt1Materials.length > 0 ? getMaterialById(mt1Materials[0]) : null;
+  const mt2Material = mt2Materials.length > 0 ? getMaterialById(mt2Materials[0]) : null;
+  const mt1AlcoholContent = parseFloat(mt1Material?.alcohol || 40) / 100;
+  const mt2AlcoholContent = parseFloat(mt2Material?.alcohol || 20) / 100;
 
-  if (currentAlcoholVolumeId === 'av1' && mt1Materials.length > 0) {
-    const mt1Material = getMaterialById(mt1Materials[0]);
-    const mt1AlcoholContent = parseFloat(mt1Material?.alcohol || 40) / 100;
-    mt1Volume = currentAlcoholVolume / mt1AlcoholContent;
-  } else if ((currentAlcoholVolumeId === 'av2' || currentAlcoholVolumeId === 'av3') && mt1Materials.length > 0) {
-    const mt1Material = getMaterialById(mt1Materials[0]);
-    const mt2Material = mt2Materials.length > 0 ? getMaterialById(mt2Materials[0]) : null;
-    const mt1AlcoholContent = parseFloat(mt1Material?.alcohol || 40) / 100;
-    const mt2AlcoholContent = parseFloat(mt2Material?.alcohol || 20) / 100;
+  const { mt1Volume, mt2Volume } = calculateMtVolumesByAlcoholVolumeId(
+    targetPureAlcohol,
+    currentAlcoholVolumeId,
+    mt1AlcoholContent,
+    mt2AlcoholContent
+  );
 
-    if (currentAlcoholVolumeId === 'av2') {
-      mt1Volume = currentAlcoholVolume / (mt1AlcoholContent + mt2AlcoholContent / 2);
-      mt2Volume = mt1Volume / 2;
-    } else {
-      mt1Volume = currentAlcoholVolume / (mt1AlcoholContent + mt2AlcoholContent / 3);
-      mt2Volume = mt1Volume / 3;
-    }
-  }
-
-  const currentVolume = {};
+  let initialVolume = {};
   for (const id of currentMaterialIds) {
-    currentVolume[id] = 0;
+    initialVolume[id] = 0;
   }
 
   const mt1Count = mt1Materials.length;
@@ -636,16 +719,38 @@ export async function calculateRecipe(emotionText, alcoholIndex, flavorPreferenc
   if (mt1Count > 0) {
     const mt1Each = mt1Volume / mt1Count;
     for (const id of mt1Materials) {
-      currentVolume[id] = Math.round(mt1Each * 10) / 10;
+      initialVolume[id] = mt1Each;
     }
   }
 
   if (mt2Count > 0) {
     const mt2Each = mt2Volume / mt2Count;
     for (const id of mt2Materials) {
-      currentVolume[id] = Math.round(mt2Each * 10) / 10;
+      initialVolume[id] = mt2Each;
     }
   }
+
+  const getAlcoholContentById = (materialId) => {
+    const m = getMaterialById(materialId);
+    if (!m) return null;
+    if (m.type === 'mt1' || m.type === 'mt2') {
+      return parseFloat(m.alcohol || 0) / 100;
+    }
+    return 0;
+  };
+
+  const alignedResult = alignVolumesToFiveMultiples(
+    initialVolume,
+    currentTotalVolume,
+    targetPureAlcohol,
+    getAlcoholContentById
+  );
+
+  const currentVolume = alignedResult.volumes;
+  const alignedPureAlcohol = alignedResult.pureAlcohol;
+  const actualAlcoholPercent = parseFloat(calculateActualAlcoholPercent(alignedPureAlcohol, currentTotalVolume).toFixed(1));
+
+  const currentOtherVolume = currentTotalVolume - Object.values(currentVolume).reduce((sum, v) => sum + v, 0);
 
   let currentTasteRatio = calculateTastePreference(primaryTasteId, refuseTasteIds, tasteLevelId, secondaryTasteId);
 
@@ -783,7 +888,7 @@ export async function calculateRecipe(emotionText, alcoholIndex, flavorPreferenc
     toneId: currentToneId,
     methodId: currentMethodId,
     methodName: method.name,
-    alcoholContent: alcoholContent,
+    alcoholContent: actualAlcoholPercent,
     totalVolume: currentTotalVolume,
     materials: materialsInfo,
     detail: recipeDetail,

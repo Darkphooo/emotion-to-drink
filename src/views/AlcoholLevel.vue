@@ -39,8 +39,8 @@ const selectedIndex = ref(null)
 const alcoholOptions = [
   { emoji: '1️⃣', text: '几乎感觉不到酒精，只是有点味道', range: '5-10%', id: 'g1' },
   { emoji: '2️⃣', text: '微醺刚刚好，还能保持清醒', range: '10-15%', id: 'g2' },
-  { emoji: '3️⃣', text: '有明显酒感，但还能控制自己', range: '15-25%', id: 'g3' },
-  { emoji: '4️⃣', text: '会有点上头，但我愿意', range: '25-30%', id: 'g4' }
+  { emoji: '3️⃣', text: '有明显酒感，但还能控制自己', range: '15-20%', id: 'g3' },
+  { emoji: '4️⃣', text: '会有点上头，但我愿意', range: '20-25%', id: 'g4' }
 ]
 
 function selectOption(index) {

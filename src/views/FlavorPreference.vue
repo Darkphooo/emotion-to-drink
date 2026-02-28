@@ -46,12 +46,17 @@
 
     <div class="secondary-input">
       <p class="secondary-label">也想要什么可以给我们备注！</p>
-      <input
-        v-model="secondaryText"
-        class="secondary-text-input"
-        placeholder="也想要酸/甜/苦/辣..."
-        @input="handleSecondaryInput"
-      />
+      <div class="secondary-options">
+        <button
+          v-for="option in secondaryOptions"
+          :key="option.id"
+          class="secondary-btn"
+          :class="{ 'secondary-selected': selectedSecondary === option.id }"
+          @click="selectedSecondary = option.id"
+        >
+          {{ option.text }}
+        </button>
+      </div>
     </div>
 
     <button
@@ -82,10 +87,18 @@ const intensityLevels = [
   { id: 'h3', text: '强烈', desc: '明显的味道' }
 ]
 
+const secondaryOptions = [
+  { id: 'sour', text: '酸' },
+  { id: 'sweet', text: '甜' },
+  { id: 'bitter', text: '苦' },
+  { id: 'spicy', text: '辣' },
+  { id: 'balance', text: '酸甜平衡' }
+]
+
 const selectedMain = ref(null)
 const selectedIntensity = ref('h2')
+const selectedSecondary = ref(null)
 const crossedFlavors = ref([])
-const secondaryText = ref('')
 const showWarning = ref(false)
 
 function handleCardClick(flavorId) {
@@ -120,16 +133,12 @@ function handleUncross(flavorId) {
   crossedFlavors.value = crossedFlavors.value.filter(id => id !== flavorId)
 }
 
-function handleSecondaryInput() {
-}
-
-function getSecondaryTasteId(text) {
-  const lower = text.toLowerCase()
-  if (lower.includes('酸') && lower.includes('甜')) return 'neutralize'
-  if (lower.includes('酸')) return 't1'
-  if (lower.includes('甜')) return 't2'
-  if (lower.includes('苦')) return 't3'
-  if (lower.includes('辣')) return 't4'
+function getSecondaryTasteId(optionId) {
+  if (optionId === 'sour') return 't1'
+  if (optionId === 'sweet') return 't2'
+  if (optionId === 'bitter') return 't3'
+  if (optionId === 'spicy') return 't4'
+  if (optionId === 'balance') return 'neutralize'
   return null
 }
 
@@ -156,18 +165,12 @@ function handleNext() {
     flavorLevels[id] = 0
   })
   
-  const secondary = secondaryText.value.toLowerCase()
-  if (secondary.includes('酸') && !crossedFlavors.value.includes('sour')) {
-    flavorLevels.sour = Math.min(flavorLevels.sour + 1, 3)
-  }
-  if (secondary.includes('甜') && !crossedFlavors.value.includes('sweet')) {
-    flavorLevels.sweet = Math.min(flavorLevels.sweet + 1, 3)
-  }
-  if (secondary.includes('苦') && !crossedFlavors.value.includes('bitter')) {
-    flavorLevels.bitter = Math.min(flavorLevels.bitter + 1, 3)
-  }
-  if (secondary.includes('辣') && !crossedFlavors.value.includes('spicy')) {
-    flavorLevels.spicy = Math.min(flavorLevels.spicy + 1, 3)
+  if (selectedSecondary.value && selectedSecondary.value !== 'balance') {
+    const tasteMap = { sour: 'sour', sweet: 'sweet', bitter: 'bitter', spicy: 'spicy' }
+    const tasteKey = tasteMap[selectedSecondary.value]
+    if (tasteKey && !crossedFlavors.value.includes(tasteKey)) {
+      flavorLevels[tasteKey] = Math.min(flavorLevels[tasteKey] + 1, 3)
+    }
   }
   
   if (flavorLevels.sour === 0 && flavorLevels.sweet === 0) {
@@ -177,7 +180,7 @@ function handleNext() {
   
   sessionStorage.setItem('flavorPreference', JSON.stringify({
     primaryTasteId: selectedMain.value ? (selectedMain.value === 'sour' ? 't1' : selectedMain.value === 'sweet' ? 't2' : selectedMain.value === 'bitter' ? 't3' : 't4') : 't1',
-    secondaryTasteId: getSecondaryTasteId(secondaryText.value),
+    secondaryTasteId: getSecondaryTasteId(selectedSecondary.value),
     refuseTasteIds: crossedFlavors.value.map(f => f === 'sour' ? 't1' : f === 'sweet' ? 't2' : f === 'bitter' ? 't3' : 't4'),
     tasteLevelId: selectedIntensity.value
   }))
@@ -206,6 +209,8 @@ function handleNext() {
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: all var(--transition-speed);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .flavor-card:active {
@@ -315,18 +320,31 @@ function handleNext() {
   margin-bottom: 8px;
 }
 
-.secondary-text-input {
-  width: 100%;
-  padding: 14px 16px;
-  border: 1px solid #e0e0e0;
-  border-radius: var(--border-radius);
-  font-size: 15px;
-  background: var(--card-bg);
+.secondary-options {
+  display: flex;
+  gap: 8px;
 }
 
-.secondary-text-input:focus {
-  outline: none;
+.secondary-btn {
+  flex: 1;
+  padding: 10px 4px;
+  background: var(--card-bg);
+  border: 2px solid #e0e0e0;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.secondary-btn:active {
+  transform: scale(0.98);
+}
+
+.secondary-btn.secondary-selected {
   border-color: var(--secondary-color);
+  background: rgba(52, 152, 219, 0.1);
+  color: var(--secondary-color);
 }
 
 .next-btn {
