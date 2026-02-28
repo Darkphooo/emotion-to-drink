@@ -9,13 +9,13 @@
     "h2": {
       "sourLevel": "h2",
       "sweetLevel": "h1",
-      "bitterLevel": "h1",
+      "bitterLevel": "h0",
       "spicyLevel": "h0"
     },
     "h3": {
       "sourLevel": "h3",
       "sweetLevel": "h1",
-      "bitterLevel": "h1",
+      "bitterLevel": "h0",
       "spicyLevel": "h0"
     }
   },

@@ -15,12 +15,12 @@
     "id": "g3",
     "description": "netural",
     "lowestAlcoholContent": 15,
-    "highestAlcoholContent": 25
+    "highestAlcoholContent": 20
   },
   {
     "id": "g4",
     "description": "stimulating",
-    "lowestAlcoholContent": 25,
-    "highestAlcoholContent": 30
+    "lowestAlcoholContent": 20,
+    "highestAlcoholContent": 25
   }
 ]
