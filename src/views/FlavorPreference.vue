@@ -2,7 +2,7 @@
   <div class="page-container fixed-height">
     <h1 class="page-title">这杯酒，你希望哪种味道更明显一点？</h1>
     <p class="page-subtitle">
-      可以选一个方向，并选择强度。如果有特别不想要的味道，可以长按划掉。
+      点击选择主要口味，点击右上角 × 划掉不想要的口味。
     </p>
 
     <div class="flavor-cards">
@@ -15,8 +15,14 @@
           'crossed': crossedFlavors.includes(flavor.id)
         }"
         @click="handleCardClick(flavor.id)"
-        @contextmenu.prevent="handleCross(flavor.id)"
       >
+        <button
+          v-if="selectedMain !== flavor.id && !crossedFlavors.includes(flavor.id)"
+          class="cross-btn"
+          @click.stop="handleCross(flavor.id)"
+        >
+          ×
+        </button>
         <span class="flavor-emoji">{{ flavor.emoji }}</span>
         <span class="flavor-text">{{ flavor.text }}</span>
       </div>
@@ -102,7 +108,10 @@ const crossedFlavors = ref([])
 const showWarning = ref(false)
 
 function handleCardClick(flavorId) {
-  if (crossedFlavors.value.includes(flavorId)) return
+  if (crossedFlavors.value.includes(flavorId)) {
+    handleUncross(flavorId)
+    return
+  }
   
   if (selectedMain.value === flavorId) {
     selectedMain.value = null
@@ -240,16 +249,22 @@ function handleNext() {
 
 .cross-btn {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 24px;
-  height: 24px;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
   border: none;
   background: #e74c3c;
   color: white;
   border-radius: 50%;
-  font-size: 12px;
+  font-size: 16px;
+  line-height: 1;
   cursor: pointer;
+  opacity: 0.8;
+}
+
+.cross-btn:hover {
+  opacity: 1;
 }
 
 .warning-message {
