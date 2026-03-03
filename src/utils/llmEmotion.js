@@ -1,4 +1,8 @@
-const API_KEY = '6965d19bd80542d1ab19d0e408a9e0d7.otoDDb01C2ieKspP';
+import { GoogleGenAI } from "@google/genai";
+const API_KEY = 'AIzaSyDI56RTPDK4cpK-k9lhZTopqhxnBAO-jz4';
+
+const ai = new GoogleGenAI({ apiKey: API_KEY });
+
 
 const EMOTION_DATA = [
   { id: 'a1', name: 'cheerful', type: 'positive', note: '愉快、开心' },
@@ -84,34 +88,14 @@ export async function matchEmotionWithGLM(userText) {
   const prompt = buildPrompt(userText);
 
   try {
-    const response = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'glm-4.5-air',
-        messages: [
-          { role: 'system', content: '你是情绪识别专家，对语言的理解精准深刻，只返回指定内容。' },
-          { role: 'user', content: prompt }
-        ],
-        temperature: 0.1,
-        stream: false,
-        thinking: {
-          type: "disabled"
-        },
-        max_tokens: 500
-      })
-    });
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    })
 
-    if (!response.ok) {
-      console.error('GLM API错误:', response.status, response.statusText);
-      return fallbackMatch(userText);
-    }
+    console.log(response.candidates[0].content.parts[0].text)
 
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
+    const content = response.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!content) {
       return fallbackMatch(userText);
@@ -128,7 +112,7 @@ export async function matchEmotionWithGLM(userText) {
 
     return fallbackMatch(userText);
   } catch (error) {
-    console.error('GLM API调用失败:', error);
+    console.error('Gemini API调用失败:', error);
     return fallbackMatch(userText);
   }
 }

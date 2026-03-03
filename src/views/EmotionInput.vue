@@ -1,18 +1,11 @@
 <template>
   <div class="page-container fixed-height">
-    <h1 class="page-title">今晚，你希望这杯酒陪你走进什么样的片刻？</h1>
-    <p class="page-subtitle">
-      可以写一句完整的话。比如：<br>
-      "想慢慢放松下来，不想太吵。"<br>
-      "庆祝一下，但不想太失控。"<br>
-      "一个人待着，但希望有点陪伴感。"<br>
-      不用写得很好，只要真实。
-    </p>
+    <h1 class="page-title glow-title">今晚，你希望这杯酒陪你走进什么样的片刻？</h1>
 
     <div class="input-area">
       <textarea
         v-model="emotionText"
-        class="emotion-input"
+        class="emotion-input diary-page"
         placeholder="写下此刻的状态，而不是你想喝什么..."
         @input="handleInput"
       ></textarea>
@@ -87,30 +80,57 @@ function handleNext() {
 </script>
 
 <style scoped>
+.page-container {
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+}
+
+.glow-title {
+  text-shadow: 0 0 15px rgba(116, 185, 255, 0.6);
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px rgba(116, 185, 255, 0.6);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(116, 185, 255, 0.8), 0 0 30px rgba(116, 185, 255, 0.4);
+  }
+}
+
 .input-area {
-  margin-bottom: 24px;
+  margin: 24px 0;
 }
 
 .emotion-input {
   width: 100%;
   min-height: 120px;
   padding: 16px;
-  border: 1px solid #e0e0e0;
+  background: rgba(27, 39, 53, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--border-radius);
   font-size: 16px;
   line-height: 1.6;
   resize: none;
-  background: var(--card-bg);
-  transition: border-color var(--transition-speed);
+  transition: all 0.3s ease;
+  font-family: inherit;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .emotion-input:focus {
   outline: none;
-  border-color: var(--secondary-color);
+  border-color: rgba(116, 185, 255, 0.5);
+  box-shadow: 0 0 20px rgba(116, 185, 255, 0.2), 0 4px 16px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  background: rgba(27, 39, 53, 0.7);
 }
 
 .emotion-input::placeholder {
-  color: #bbb;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
 }
 
 .inspiration-cards {
@@ -119,7 +139,7 @@ function handleNext() {
 
 .inspiration-label {
   font-size: 13px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 12px;
   text-align: center;
 }
@@ -133,29 +153,81 @@ function handleNext() {
 
 .inspiration-card {
   padding: 10px 16px;
-  background: rgba(52, 152, 219, 0.1);
-  border: 1px solid rgba(52, 152, 219, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   font-size: 14px;
-  color: var(--secondary-color);
+  color: rgba(116, 185, 255, 0.9);
   cursor: pointer;
-  transition: all var(--transition-speed);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.inspiration-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(116, 185, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.inspiration-card:hover::before {
+  width: 150px;
+  height: 150px;
+}
+
+.inspiration-card:hover {
+  background: rgba(116, 185, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(116, 185, 255, 0.2);
+  border-color: rgba(116, 185, 255, 0.3);
 }
 
 .inspiration-card:active {
-  background: rgba(52, 152, 219, 0.2);
   transform: scale(0.95);
 }
 
 .feedback-message {
   text-align: center;
   padding: 12px;
-  color: var(--secondary-color);
+  color: rgba(116, 185, 255, 0.9);
   font-size: 15px;
   margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(116, 185, 255, 0.5);
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .next-btn {
   margin-top: auto;
+}
+
+@media (max-width: 480px) {
+  .sticky-note {
+    max-width: calc(50% - 6px);
+  }
+  
+  .sticky-note.hint {
+    max-width: 100%;
+  }
 }
 </style>

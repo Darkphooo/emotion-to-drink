@@ -76,6 +76,13 @@
           </div>
         </div>
       </div>
+
+      <div class="action-buttons">
+        <button class="btn-secondary favorite-btn-main" @click="toggleFavorite">
+          <span v-if="!isFavorite">❤️ 收藏到我的最爱</span>
+          <span v-else>💔 取消收藏</span>
+        </button>
+      </div>
     </div>
 
     <button class="btn-primary restart-btn" @click="handleRestart">
@@ -91,10 +98,93 @@ import { calculateRecipe } from '../utils/recipeEngine'
 
 const router = useRouter()
 const recipe = ref(null)
+const isFavorite = ref(false)
+const currentHistoryIndex = ref(-1)
 
 function getTasteLevel(level) {
   if (!level) return 0
   return parseInt(level.replace('h', ''))
+}
+
+function saveToHistory() {
+  const emotionText = sessionStorage.getItem('emotionText') || ''
+  const alcoholData = sessionStorage.getItem('alcoholLevel')
+  const alcoholIndex = alcoholData ? JSON.parse(alcoholData).index : ''
+  
+  const historyItem = {
+    date: new Date().toLocaleString('zh-CN'),
+    emotion: emotionText.substring(0, 30) + (emotionText.length > 30 ? '...' : ''),
+    recipeName: recipe.value.methodName,
+    alcohol: recipe.value.alcoholContent,
+    alcoholIndex: alcoholIndex,
+    recipe: recipe.value,
+    favorite: false
+  }
+  
+  const saved = localStorage.getItem('drinkHistory')
+  let historyList = saved ? JSON.parse(saved) : []
+  historyList.unshift(historyItem)
+  currentHistoryIndex.value = 0
+  localStorage.setItem('drinkHistory', JSON.stringify(historyList))
+}
+
+function toggleFavorite() {
+  const savedFavorites = localStorage.getItem('drinkFavorites')
+  let favoritesList = savedFavorites ? JSON.parse(savedFavorites) : []
+  
+  const emotionText = sessionStorage.getItem('emotionText') || ''
+  const emotionKey = emotionText.substring(0, 30) + (emotionText.length > 30 ? '...' : '')
+  const recipeName = recipe.value.methodName
+  
+  const existingIndex = favoritesList.findIndex(f => 
+    f.emotion === emotionKey && f.recipeName === recipeName
+  )
+  
+  if (existingIndex !== -1) {
+    favoritesList.splice(existingIndex, 1)
+    isFavorite.value = false
+  } else {
+    const historySaved = localStorage.getItem('drinkHistory')
+    const historyList = historySaved ? JSON.parse(historySaved) : []
+    const historyItem = historyList.find(h => h.emotion === emotionKey && h.recipeName === recipeName)
+    
+    if (historyItem) {
+      favoritesList.unshift({ ...historyItem, favorite: true })
+    } else {
+      const alcoholData = sessionStorage.getItem('alcoholLevel')
+      const alcoholIndex = alcoholData ? JSON.parse(alcoholData).index : ''
+      favoritesList.unshift({
+        date: new Date().toLocaleString('zh-CN'),
+        emotion: emotionKey,
+        recipeName: recipeName,
+        alcohol: recipe.value.alcoholContent,
+        alcoholIndex: alcoholIndex,
+        recipe: recipe.value,
+        favorite: true
+      })
+    }
+    isFavorite.value = true
+  }
+  
+  localStorage.setItem('drinkFavorites', JSON.stringify(favoritesList))
+}
+
+function checkIfFavorite() {
+  const savedFavorites = localStorage.getItem('drinkFavorites')
+  if (!savedFavorites) return
+  
+  const favoritesList = JSON.parse(savedFavorites)
+  const emotionText = sessionStorage.getItem('emotionText') || ''
+  const emotionKey = emotionText.substring(0, 30) + (emotionText.length > 30 ? '...' : '')
+  
+  const index = favoritesList.findIndex(item => 
+    item.emotion === emotionKey &&
+    item.recipeName === recipe.value.methodName
+  )
+  
+  if (index !== -1) {
+    isFavorite.value = true
+  }
 }
 
 onMounted(async () => {
@@ -111,6 +201,9 @@ onMounted(async () => {
   const flavorPreference = JSON.parse(flavorData)
 
   recipe.value = await calculateRecipe(emotionText, alcoholIndex, flavorPreference, true)
+  
+  saveToHistory()
+  checkIfFavorite()
 })
 
 function handleRestart() {
@@ -120,17 +213,24 @@ function handleRestart() {
 </script>
 
 <style scoped>
+.page-container {
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+}
+
 .result-card {
-  background: var(--card-bg);
+  background: rgba(27, 39, 53, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--border-radius);
   padding: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .loading {
   text-align: center;
   padding: 40px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 16px;
 }
 
@@ -138,13 +238,14 @@ function handleRestart() {
   font-size: 28px;
   font-weight: 700;
   text-align: center;
-  color: var(--primary-color);
+  color: #74b9ff;
   margin-bottom: 8px;
+  text-shadow: 0 0 15px rgba(116, 185, 255, 0.5);
 }
 
 .result-description {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
   text-align: center;
   margin-bottom: 24px;
   line-height: 1.5;
@@ -154,8 +255,8 @@ function handleRestart() {
   display: flex;
   justify-content: space-around;
   padding: 16px 0;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 24px;
 }
 
@@ -167,21 +268,21 @@ function handleRestart() {
 
 .stat-label {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 4px;
 }
 
 .stat-value {
   font-size: 18px;
   font-weight: 600;
-  color: var(--primary-color);
+  color: #74b9ff;
 }
 
 .section-title {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 12px;
-  color: var(--primary-color);
+  color: #74b9ff;
 }
 
 .ingredients-section {
@@ -196,18 +297,18 @@ function handleRestart() {
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px dashed #eee;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
 .ingredient-name {
   font-size: 15px;
-  color: var(--text-primary);
+  color: #fff;
 }
 
 .ingredient-amount {
   font-size: 15px;
   font-weight: 500;
-  color: var(--secondary-color);
+  color: #a29bfe;
 }
 
 .method-section {
@@ -220,7 +321,7 @@ function handleRestart() {
 
 .method-steps li {
   font-size: 14px;
-  color: var(--text-primary);
+  color: #fff;
   margin-bottom: 6px;
   line-height: 1.4;
 }
@@ -243,22 +344,58 @@ function handleRestart() {
 .flavor-label {
   width: 30px;
   font-size: 13px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .bar-track {
   flex: 1;
   height: 8px;
-  background: #eee;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--secondary-color), #5dade2);
+  background: linear-gradient(90deg, #a29bfe, #00cec9);
   border-radius: 4px;
   transition: width 0.5s ease;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(116, 185, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(116, 185, 255, 0.2);
+}
+
+.favorite-btn-main {
+  background: rgba(116, 185, 255, 0.1);
+  border-color: rgba(116, 185, 255, 0.3);
+}
+
+.favorite-btn-main:hover {
+  background: rgba(116, 185, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(116, 185, 255, 0.3);
 }
 
 .restart-btn {

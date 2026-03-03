@@ -199,6 +199,10 @@ function handleNext() {
 </script>
 
 <style scoped>
+.page-container {
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+}
+
 .flavor-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -213,13 +217,16 @@ function handleNext() {
   align-items: center;
   justify-content: center;
   padding: 24px 16px;
-  background: var(--card-bg);
-  border: 2px solid #e0e0e0;
+  background: rgba(27, 39, 53, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--border-radius);
   cursor: pointer;
-  transition: all var(--transition-speed);
+  transition: all 0.3s ease;
   user-select: none;
   -webkit-user-select: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .flavor-card:active {
@@ -227,14 +234,20 @@ function handleNext() {
 }
 
 .flavor-card.selected {
-  border-color: var(--secondary-color);
-  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+  border-color: rgba(116, 185, 255, 0.5);
+  box-shadow: 0 0 20px rgba(116, 185, 255, 0.3), 0 4px 16px rgba(0, 0, 0, 0.3);
+  background: rgba(116, 185, 255, 0.1);
 }
 
 .flavor-card.crossed {
   opacity: 0.4;
-  border-color: #ccc;
+  border-color: rgba(255, 255, 255, 0.1);
   text-decoration: line-through;
+}
+
+.flavor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(116, 185, 255, 0.2);
 }
 
 .flavor-emoji {
@@ -244,7 +257,7 @@ function handleNext() {
 
 .flavor-text {
   font-size: 15px;
-  color: var(--text-primary);
+  color: #fff;
 }
 
 .cross-btn {
@@ -254,23 +267,25 @@ function handleNext() {
   width: 22px;
   height: 22px;
   border: none;
-  background: #e74c3c;
+  background: rgba(231, 76, 60, 0.8);
   color: white;
   border-radius: 50%;
   font-size: 16px;
   line-height: 1;
   cursor: pointer;
   opacity: 0.8;
+  transition: all 0.3s ease;
 }
 
 .cross-btn:hover {
   opacity: 1;
+  transform: scale(1.1);
 }
 
 .warning-message {
   text-align: center;
   padding: 12px;
-  color: #e74c3c;
+  color: #ff6b6b;
   font-size: 14px;
   margin-bottom: 16px;
 }
@@ -281,7 +296,7 @@ function handleNext() {
 
 .intensity-label {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 12px;
   text-align: center;
 }
@@ -297,31 +312,39 @@ function handleNext() {
   flex-direction: column;
   align-items: center;
   padding: 12px 8px;
-  background: var(--card-bg);
-  border: 2px solid #e0e0e0;
+  background: rgba(27, 39, 53, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--border-radius);
   cursor: pointer;
-  transition: all var(--transition-speed);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .intensity-btn:active {
   transform: scale(0.98);
 }
 
+.intensity-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(116, 185, 255, 0.2);
+}
+
 .intensity-btn.intensity-selected {
-  border-color: var(--secondary-color);
-  background: rgba(52, 152, 219, 0.05);
+  border-color: rgba(116, 185, 255, 0.5);
+  background: rgba(116, 185, 255, 0.1);
 }
 
 .intensity-text {
   font-size: 15px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #fff;
 }
 
 .intensity-desc {
   font-size: 12px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
   margin-top: 4px;
 }
 
@@ -331,7 +354,7 @@ function handleNext() {
 
 .secondary-label {
   font-size: 14px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 8px;
 }
 
@@ -343,23 +366,31 @@ function handleNext() {
 .secondary-btn {
   flex: 1;
   padding: 10px 4px;
-  background: var(--card-bg);
-  border: 2px solid #e0e0e0;
+  background: rgba(27, 39, 53, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--border-radius);
   font-size: 14px;
-  color: var(--text-primary);
+  color: #fff;
   cursor: pointer;
-  transition: all var(--transition-speed);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .secondary-btn:active {
   transform: scale(0.98);
 }
 
+.secondary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(116, 185, 255, 0.2);
+}
+
 .secondary-btn.secondary-selected {
-  border-color: var(--secondary-color);
-  background: rgba(52, 152, 219, 0.1);
-  color: var(--secondary-color);
+  border-color: rgba(116, 185, 255, 0.5);
+  background: rgba(116, 185, 255, 0.1);
+  color: #74b9ff;
 }
 
 .next-btn {

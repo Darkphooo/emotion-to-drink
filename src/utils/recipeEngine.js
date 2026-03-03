@@ -10,7 +10,7 @@ import sourSweetRatioData from '../data/sourSweetRatio.json';
 import spicyUsageData from '../data/spicyUsage.json';
 import tasteRatioData from '../data/tasteRatio.json';
 import toneWithMaterialData from '../data/toneWithMaterial.json';
-import { matchEmotionWithGLM } from './glmEmotion';
+import { matchEmotionWithGLM } from './llmEmotion';
 
 function getMaterialById(id) {
   return materialData.find(m => m.id === id);
@@ -355,8 +355,8 @@ function calculateTastePreference(currentTasteId, currentRefuseTasteIds, current
   }
 
   for (const refuseId of currentRefuseTasteIds) {
-    if (refuseId === 't1') tasteRatio.sourLevel = 'h0';
-    if (refuseId === 't2') tasteRatio.sweetLevel = 'h0';
+    if (refuseId === 't1') tasteRatio.sourLevel = 'h1';
+    if (refuseId === 't2') tasteRatio.sweetLevel = 'h1';
     if (refuseId === 't3') tasteRatio.bitterLevel = 'h0';
     if (refuseId === 't4') tasteRatio.spicyLevel = 'h0';
   }
@@ -662,13 +662,49 @@ export async function calculateRecipe(emotionText, alcoholIndex, flavorPreferenc
   try {
     currentToneId = getToneIdByEmotion(currentEmotionId);
   } catch (error) {
-    console.error('getToneIdByEmotion error:', error.message);
     currentToneId = 'c4';
   }
 
   let currentMaterialIds = selectMaterials(currentToneId);
 
   const currentMethodId = determineMethod(currentMaterialIds);
+
+  let currentTasteRatio = calculateTastePreference(primaryTasteId, refuseTasteIds, tasteLevelId, secondaryTasteId);
+
+  currentTasteRatio = subtractMaterialTaste(currentMaterialIds, currentTasteRatio);
+
+  const currentMaterialRatio = getSourSweetRatio(currentTasteRatio.sourLevel, currentTasteRatio.sweetLevel);
+
+  const sourLevel = levelToNumber(currentTasteRatio.sourLevel);
+  const sweetLevel = levelToNumber(currentTasteRatio.sweetLevel);
+  const bitterLevel = levelToNumber(currentTasteRatio.bitterLevel);
+  const spicyLevel = levelToNumber(currentTasteRatio.spicyLevel);
+
+  if (sourLevel > 0 && !hasMaterialWithTaste(currentMaterialIds, 't1')) {
+    if (!currentMaterialIds.includes('d11')) {
+      currentMaterialIds.push('d11');
+    }
+  }
+  if (sweetLevel > 0 && !hasMaterialWithTaste(currentMaterialIds, 't2')) {
+    if (!currentMaterialIds.includes('d13')) {
+      currentMaterialIds.push('d13');
+    }
+  }
+  if (bitterLevel > 0 && !hasMaterialWithTaste(currentMaterialIds, 't3')) {
+    if (!currentMaterialIds.includes('d16')) {
+      currentMaterialIds.push('d16');
+    }
+  }
+  if (spicyLevel > 0 && !hasMaterialWithTaste(currentMaterialIds, 't4')) {
+    if (!currentMaterialIds.includes('d15')) {
+      currentMaterialIds.push('d15');
+    }
+  }
+
+  const hasSourOrSweet = currentMaterialIds.includes('d11') ||
+    currentMaterialIds.includes('d12') ||
+    currentMaterialIds.includes('d13') ||
+    currentMaterialIds.includes('d14');
 
   const alcoholRange = getAlcoholContentRangeById(alcoholIndex) || getAlcoholContentRangeById('g2');
   const minAlcoholPercent = alcoholRange.lowestAlcoholContent;
@@ -746,54 +782,13 @@ export async function calculateRecipe(emotionText, alcoholIndex, flavorPreferenc
     getAlcoholContentById
   );
 
-  const currentVolume = alignedResult.volumes;
+  let currentVolume = alignedResult.volumes;
   const alignedPureAlcohol = alignedResult.pureAlcohol;
   const actualAlcoholPercent = parseFloat(calculateActualAlcoholPercent(alignedPureAlcohol, currentTotalVolume).toFixed(1));
 
   const currentOtherVolume = currentTotalVolume - Object.values(currentVolume).reduce((sum, v) => sum + v, 0);
 
-  let currentTasteRatio = calculateTastePreference(primaryTasteId, refuseTasteIds, tasteLevelId, secondaryTasteId);
-
-  currentTasteRatio = subtractMaterialTaste(currentMaterialIds, currentTasteRatio);
-
-  const currentMaterialRatio = getSourSweetRatio(currentTasteRatio.sourLevel, currentTasteRatio.sweetLevel);
-
-  const hasSourOrSweet = currentMaterialIds.includes('d11') ||
-    currentMaterialIds.includes('d12') ||
-    currentMaterialIds.includes('d13') ||
-    currentMaterialIds.includes('d14');
-
   if (hasSourOrSweet) {
-    const sourLevel = levelToNumber(currentTasteRatio.sourLevel);
-    const sweetLevel = levelToNumber(currentTasteRatio.sweetLevel);
-
-    if (!hasMaterialWithTaste(currentMaterialIds, 't1') && sourLevel > 0) {
-      if (!currentMaterialIds.includes('d11')) {
-        currentMaterialIds.push('d11');
-      }
-    }
-    if (!hasMaterialWithTaste(currentMaterialIds, 't2') && sweetLevel > 0) {
-      if (!currentMaterialIds.includes('d13')) {
-        currentMaterialIds.push('d13');
-      }
-    }
-    if (!hasMaterialWithTaste(currentMaterialIds, 't3') && levelToNumber(currentTasteRatio.bitterLevel) > 0) {
-      if (!currentMaterialIds.includes('d16')) {
-        currentMaterialIds.push('d16');
-      }
-    }
-    if (!hasMaterialWithTaste(currentMaterialIds, 't4') && levelToNumber(currentTasteRatio.spicyLevel) > 0) {
-      if (!currentMaterialIds.includes('d15')) {
-        currentMaterialIds.push('d15');
-      }
-    }
-
-    for (const id of currentMaterialIds) {
-      if ((id === 'd11' || id === 'd12' || id === 'd13' || id === 'd14') && !currentVolume.hasOwnProperty(id)) {
-        currentVolume[id] = 0;
-      }
-    }
-
     const processedVolume = allocateSourSweetVolume(currentVolume, currentMaterialRatio, currentOtherVolume);
 
     for (const [key, val] of Object.entries(processedVolume)) {
@@ -801,27 +796,24 @@ export async function calculateRecipe(emotionText, alcoholIndex, flavorPreferenc
     }
   }
 
-  const bitterLevel = levelToNumber(currentTasteRatio.bitterLevel);
-  const spicyLevel = levelToNumber(currentTasteRatio.spicyLevel);
-
   const bitterUsage = bitterUsageData[`h${bitterLevel}`];
   const spicyUsage = spicyUsageData[`h${spicyLevel}`];
+
+  const finalVolume = fillVolume(currentVolume, currentTotalVolume, currentMaterialIds);
 
   if (bitterUsage && bitterUsage.usage > 0) {
     if (!currentMaterialIds.includes(bitterUsage.material)) {
       currentMaterialIds.push(bitterUsage.material);
     }
-    currentVolume[bitterUsage.material] = bitterUsage.usage;
+    finalVolume[bitterUsage.material] = bitterUsage.usage;
   }
 
   if (spicyUsage && spicyUsage.usage > 0) {
     if (!currentMaterialIds.includes(spicyUsage.material)) {
       currentMaterialIds.push(spicyUsage.material);
     }
-    currentVolume[spicyUsage.material] = spicyUsage.usage;
+    finalVolume[spicyUsage.material] = spicyUsage.usage;
   }
-
-  const finalVolume = fillVolume(currentVolume, currentTotalVolume, currentMaterialIds);
 
   for (const id of Object.keys(finalVolume)) {
     const m = getMaterialById(id);
@@ -841,7 +833,7 @@ export async function calculateRecipe(emotionText, alcoholIndex, flavorPreferenc
 
   if (mt4TotalVolume < 20) {
     const missingVolume = 20 - mt4TotalVolume;
-    
+
     const mt4WithZeroVolume = currentMaterialIds.filter(id => {
       const m = getMaterialById(id);
       return m && m.type === 'mt4' && finalVolume[id] === 0;
