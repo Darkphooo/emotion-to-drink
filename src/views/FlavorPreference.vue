@@ -51,7 +51,7 @@
     </transition>
 
     <div class="secondary-input">
-      <p class="secondary-label">也想要什么可以给我们备注！</p>
+      <p class="secondary-label">如果你还想这杯酒突出某种口味，请选择！</p>
       <div class="secondary-options">
         <button
           v-for="option in secondaryOptions"
@@ -97,8 +97,7 @@ const secondaryOptions = [
   { id: 'sour', text: '酸' },
   { id: 'sweet', text: '甜' },
   { id: 'bitter', text: '苦' },
-  { id: 'spicy', text: '辣' },
-  { id: 'balance', text: '酸甜平衡' }
+  { id: 'spicy', text: '辣' }
 ]
 
 const selectedMain = ref(null)
@@ -147,7 +146,6 @@ function getSecondaryTasteId(optionId) {
   if (optionId === 'sweet') return 't2'
   if (optionId === 'bitter') return 't3'
   if (optionId === 'spicy') return 't4'
-  if (optionId === 'balance') return 'neutralize'
   return null
 }
 
@@ -174,7 +172,7 @@ function handleNext() {
     flavorLevels[id] = 0
   })
   
-  if (selectedSecondary.value && selectedSecondary.value !== 'balance') {
+  if (selectedSecondary.value) {
     const tasteMap = { sour: 'sour', sweet: 'sweet', bitter: 'bitter', spicy: 'spicy' }
     const tasteKey = tasteMap[selectedSecondary.value]
     if (tasteKey && !crossedFlavors.value.includes(tasteKey)) {
