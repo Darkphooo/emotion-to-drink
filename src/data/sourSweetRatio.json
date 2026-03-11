@@ -35,12 +35,34 @@
       "sourLevel": "1",
       "sweetLevel": "3",
       "materialRatio": "1:2"
+    },
+    {
+      "id": "i7",
+      "sourLevel": "1",
+      "sweetLevel": "0",
+      "materialRatio": "rule",
+      "allocationRule": "fixed_sour_15_no_sweet"
+    },
+    {
+      "id": "i8",
+      "sourLevel": "2",
+      "sweetLevel": "0",
+      "materialRatio": "rule",
+      "allocationRule": "fixed_sour_20_no_sweet"
+    },
+    {
+      "id": "i9",
+      "sourLevel": "3",
+      "sweetLevel": "0",
+      "materialRatio": "rule",
+      "allocationRule": "sour_matches_non_syrup_sweet_volume"
     }
   ],
   "comment": [
     "materialRatio=(d11+d12)/(d13+d14)",
     "d11+d12>=10",
     "d13+d14>=10",
-    "d11+d12+d13+d14<alcoholVolume"
+    "d11+d12+d13+d14<alcoholVolume",
+    "i7/i8/i9 use allocationRule instead of materialRatio"
   ]
 }
