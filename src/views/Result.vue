@@ -43,40 +43,6 @@
         </ol>
       </div>
 
-      <div class="flavor-section">
-        <h2 class="section-title">口感特征</h2>
-        <div class="flavor-bars">
-          <div class="flavor-bar">
-            <span class="flavor-label">酸</span>
-            <div class="bar-track">
-              <div class="bar-fill" :style="{ width: (getTasteLevel(recipe.tasteRatio.sourLevel) / 3 * 100) + '%' }">
-              </div>
-            </div>
-          </div>
-          <div class="flavor-bar">
-            <span class="flavor-label">甜</span>
-            <div class="bar-track">
-              <div class="bar-fill" :style="{ width: (getTasteLevel(recipe.tasteRatio.sweetLevel) / 3 * 100) + '%' }">
-              </div>
-            </div>
-          </div>
-          <div class="flavor-bar">
-            <span class="flavor-label">苦</span>
-            <div class="bar-track">
-              <div class="bar-fill" :style="{ width: (getTasteLevel(recipe.tasteRatio.bitterLevel) / 3 * 100) + '%' }">
-              </div>
-            </div>
-          </div>
-          <div class="flavor-bar">
-            <span class="flavor-label">辣</span>
-            <div class="bar-track">
-              <div class="bar-fill" :style="{ width: (getTasteLevel(recipe.tasteRatio.spicyLevel) / 3 * 100) + '%' }">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="action-buttons">
         <button class="btn-secondary favorite-btn-main" @click="toggleFavorite">
           <span v-if="!isFavorite">❤️ 收藏到我的最爱</span>
@@ -100,11 +66,6 @@ const router = useRouter()
 const recipe = ref(null)
 const isFavorite = ref(false)
 const currentHistoryIndex = ref(-1)
-
-function getTasteLevel(level) {
-  if (!level) return 0
-  return parseInt(level.replace('h', ''))
-}
 
 function saveToHistory() {
   const emotionText = sessionStorage.getItem('emotionText') || ''
@@ -324,42 +285,6 @@ function handleRestart() {
   color: #fff;
   margin-bottom: 6px;
   line-height: 1.4;
-}
-
-.flavor-section {
-  margin-bottom: 24px;
-}
-
-.flavor-bars {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.flavor-bar {
-  display: flex;
-  align-items: center;
-}
-
-.flavor-label {
-  width: 30px;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.bar-track {
-  flex: 1;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #a29bfe, #00cec9);
-  border-radius: 4px;
-  transition: width 0.5s ease;
 }
 
 .action-buttons {
