@@ -412,10 +412,6 @@ function hasMaterialWithTaste(materialIds, tasteId) {
 }
 
 function allocateSourSweetVolume(currentVolume, currentMaterialRatio, currentTotalVolume) {
-  const ratioParts = currentMaterialRatio.materialRatio.split(':');
-  const ratioSour = parseFloat(ratioParts[0]);
-  const ratioSweet = parseFloat(ratioParts[1]);
-
   const d11Id = 'd11';
   const d12Id = 'd12';
   const d13Id = 'd13';
@@ -429,6 +425,58 @@ function allocateSourSweetVolume(currentVolume, currentMaterialRatio, currentTot
   if (!hasD11 && !hasD12 && !hasD13 && !hasD14) {
     return currentVolume;
   }
+
+  const splitSourVolume = (targetTotal) => {
+    const normalizedTotal = Math.max(0, Math.round(targetTotal / 5) * 5);
+    let d11Volume = 0;
+    let d12Volume = 0;
+
+    if (hasD11 && hasD12) {
+      d11Volume = Math.ceil(normalizedTotal / 2 / 5) * 5;
+      d12Volume = Math.max(0, normalizedTotal - d11Volume);
+    } else if (hasD11) {
+      d11Volume = normalizedTotal;
+    } else if (hasD12) {
+      d12Volume = normalizedTotal;
+    }
+
+    return {
+      ...currentVolume,
+      ...(hasD11 ? { [d11Id]: d11Volume } : {}),
+      ...(hasD12 ? { [d12Id]: d12Volume } : {}),
+      ...(hasD13 ? { [d13Id]: 0 } : {}),
+      ...(hasD14 ? { [d14Id]: 0 } : {})
+    };
+  };
+
+  if (currentMaterialRatio.allocationRule === 'fixed_sour_15_no_sweet') {
+    return splitSourVolume(15);
+  }
+
+  if (currentMaterialRatio.allocationRule === 'fixed_sour_20_no_sweet') {
+    return splitSourVolume(20);
+  }
+
+  if (currentMaterialRatio.allocationRule === 'sour_matches_non_syrup_sweet_volume') {
+    const targetSourVolume = Object.entries(currentVolume).reduce((sum, [id, volume]) => {
+      if (id === d13Id || id === d14Id) {
+        return sum;
+      }
+
+      const material = getMaterialById(id);
+      if (material?.taste === 't2') {
+        return sum + volume;
+      }
+
+      return sum;
+    }, 0);
+
+    return splitSourVolume(targetSourVolume);
+  }
+
+  const ratioParts = currentMaterialRatio.materialRatio.split(':');
+  const ratioSour = parseFloat(ratioParts[0]);
+  const ratioSweet = parseFloat(ratioParts[1]);
 
   const maxIterations = 100;
   for (let iter = 0; iter < maxIterations; iter++) {

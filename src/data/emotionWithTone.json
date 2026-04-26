@@ -1,102 +1,102 @@
 {
   "a1": {
     "toneId": "c1",
-    "note": "Expressive, bright, immediate pleasure"
+    "note": "外放、明亮、即时愉悦"
   },
   "a2": {
     "toneId": "c3",
-    "note": "High energy, stimulating, clear"
+    "note": "高能量、刺激感、清晰"
   },
   "a3": {
     "toneId": "c6",
-    "note": "Relaxed, low-burden, body-focused"
+    "note": "放松、低负担、身体感"
   },
   "a4": {
     "toneId": "c1",
-    "note": "Soothing, enveloping, reduced stimulation"
+    "note": "安抚、包裹、降低刺激"
   },
   "a5": {
     "toneId": "c7",
-    "note": "Tension release, confrontational edge"
+    "note": "张力释放、对抗感"
   },
   "a6": {
     "toneId": "c8",
-    "note": "Calming, stabilizing the nervous system"
+    "note": "镇静、稳定神经系统"
   },
   "a7": {
     "toneId": "c4",
-    "note": "Balanced, restrained expression"
+    "note": "平衡、不过度表达"
   },
   "a8": {
     "toneId": "c5",
-    "note": "Noise-reducing, time-stretching"
+    "note": "降噪、延展时间"
   },
   "a9": {
     "toneId": "c8",
-    "note": "Neutral structure, sense of stability"
+    "note": "中性结构、稳定感"
   },
   "a10": {
     "toneId": "c6",
-    "note": "Complex, layered, not unified"
+    "note": "复杂、多层、不统一"
   },
   "a11": {
     "toneId": "c2",
-    "note": "Exploratory, unknown, open"
+    "note": "探索、未知、开放"
   },
   "a12": {
     "toneId": "c1",
-    "note": "Memory, warmth, sense of time"
+    "note": "回忆、温度、时间感"
   },
   "b1": {
     "toneId": "c6",
-    "note": "Complex, layered, not a single emotion"
+    "note": "复杂、多层、非单一情绪"
   },
   "b2": {
     "toneId": "c7",
-    "note": "Tension, release, confrontation"
+    "note": "张力、释放、对抗"
   },
   "b3": {
     "toneId": "c8",
-    "note": "Stability, calm, order"
+    "note": "稳定、镇静、秩序"
   },
   "b4": {
     "toneId": "c1",
-    "note": "Enveloping, warm, inward-returning"
+    "note": "包裹、温度、回收"
   },
   "b5": {
     "toneId": "c3",
-    "note": "High energy, clear, stimulating"
+    "note": "高能量、清晰、刺激"
   },
   "b6": {
     "toneId": "c2",
-    "note": "Expressive, pleasurable, exploratory"
+    "note": "外放、愉悦、探索"
   },
   "b7": {
     "toneId": "c9",
-    "note": "Low-burden, experimental"
+    "note": "轻负担、尝试"
   },
   "b8": {
     "toneId": "c5",
-    "note": "Slow, extended"
+    "note": "缓慢、延展"
   },
   "b9": {
     "toneId": "c6",
-    "note": "Stable + complex"
+    "note": "稳定 + 复杂"
   },
   "b10": {
     "toneId": "c8",
-    "note": "Centered, controlled"
+    "note": "中轴、控制"
   },
   "b11": {
     "toneId": "c4",
-    "note": "Stable + exploratory"
+    "note": "稳定 + 探索"
   },
   "b12": {
     "toneId": "c1",
-    "note": "Gentle, soothing"
+    "note": "温和、安抚"
   },
   "b13": {
     "toneId": "c8",
-    "note": "Restrained, nostalgic"
+    "note": "克制、回忆"
   }
 }
