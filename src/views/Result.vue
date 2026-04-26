@@ -1,41 +1,41 @@
 <template>
   <div class="page-container">
     <div v-if="!recipe" class="loading">
-      正在计算配方...
+      Looking for recipes tailored just for you...
     </div>
     <div v-else class="result-card">
-      <h1 class="result-title">调酒配方</h1>
-      <p class="result-description">根据您的心情和偏好为您推荐</p>
+      <h1 class="result-title">Cocktail Recipe</h1>
+      <p class="result-description">Recommended based on your mood and preferences</p>
 
       <div class="result-stats">
         <div class="stat-item">
-          <span class="stat-label">酒精度</span>
+          <span class="stat-label">ABV</span>
           <span class="stat-value">{{ recipe.alcoholContent }}%</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">总量</span>
+          <span class="stat-label">Total Volume</span>
           <span class="stat-value">{{ recipe.totalVolume }}ml</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">制作方法</span>
+          <span class="stat-label">Method</span>
           <span class="stat-value">{{ recipe.methodName }}</span>
         </div>
       </div>
 
       <div class="ingredients-section">
-        <h2 class="section-title">配方原料</h2>
+        <h2 class="section-title">Ingredients</h2>
         <ul class="ingredients-list">
           <li v-for="(ing, id) in recipe.materials" :key="id" class="ingredient-item">
             <span class="ingredient-name">{{ ing.name }}</span>
             <span class="ingredient-amount">
-              {{ ing.volume }}{{ ing.unit === '滴' ? '滴' : 'ml' }}
+              {{ ing.volume }}{{ ing.unit === 'drop' ? 'drop' : 'ml' }}
             </span>
           </li>
         </ul>
       </div>
 
       <div class="method-section">
-        <h2 class="section-title">制作说明</h2>
+        <h2 class="section-title">Instructions</h2>
         <ol class="method-steps">
           <li v-for="(step, index) in recipe.detail" :key="index">
             {{ step }}
@@ -45,14 +45,14 @@
 
       <div class="action-buttons">
         <button class="btn-secondary favorite-btn-main" @click="toggleFavorite">
-          <span v-if="!isFavorite">❤️ 收藏到我的最爱</span>
-          <span v-else>💔 取消收藏</span>
+          <span v-if="!isFavorite">❤️ Save to Favorites</span>
+          <span v-else>💔 Remove from Favorites</span>
         </button>
       </div>
     </div>
 
     <button class="btn-primary restart-btn" @click="handleRestart">
-      重新开始
+      Start Again
     </button>
   </div>
 </template>
@@ -71,7 +71,7 @@ function saveToHistory() {
   const emotionText = sessionStorage.getItem('emotionText') || ''
   const alcoholData = sessionStorage.getItem('alcoholLevel')
   const alcoholIndex = alcoholData ? JSON.parse(alcoholData).index : ''
-  
+
   const historyItem = {
     date: new Date().toLocaleString('zh-CN'),
     emotion: emotionText.substring(0, 30) + (emotionText.length > 30 ? '...' : ''),
@@ -81,7 +81,7 @@ function saveToHistory() {
     recipe: recipe.value,
     favorite: false
   }
-  
+
   const saved = localStorage.getItem('drinkHistory')
   let historyList = saved ? JSON.parse(saved) : []
   historyList.unshift(historyItem)
@@ -92,15 +92,15 @@ function saveToHistory() {
 function toggleFavorite() {
   const savedFavorites = localStorage.getItem('drinkFavorites')
   let favoritesList = savedFavorites ? JSON.parse(savedFavorites) : []
-  
+
   const emotionText = sessionStorage.getItem('emotionText') || ''
   const emotionKey = emotionText.substring(0, 30) + (emotionText.length > 30 ? '...' : '')
   const recipeName = recipe.value.methodName
-  
-  const existingIndex = favoritesList.findIndex(f => 
+
+  const existingIndex = favoritesList.findIndex(f =>
     f.emotion === emotionKey && f.recipeName === recipeName
   )
-  
+
   if (existingIndex !== -1) {
     favoritesList.splice(existingIndex, 1)
     isFavorite.value = false
@@ -108,7 +108,7 @@ function toggleFavorite() {
     const historySaved = localStorage.getItem('drinkHistory')
     const historyList = historySaved ? JSON.parse(historySaved) : []
     const historyItem = historyList.find(h => h.emotion === emotionKey && h.recipeName === recipeName)
-    
+
     if (historyItem) {
       favoritesList.unshift({ ...historyItem, favorite: true })
     } else {
@@ -126,23 +126,23 @@ function toggleFavorite() {
     }
     isFavorite.value = true
   }
-  
+
   localStorage.setItem('drinkFavorites', JSON.stringify(favoritesList))
 }
 
 function checkIfFavorite() {
   const savedFavorites = localStorage.getItem('drinkFavorites')
   if (!savedFavorites) return
-  
+
   const favoritesList = JSON.parse(savedFavorites)
   const emotionText = sessionStorage.getItem('emotionText') || ''
   const emotionKey = emotionText.substring(0, 30) + (emotionText.length > 30 ? '...' : '')
-  
-  const index = favoritesList.findIndex(item => 
+
+  const index = favoritesList.findIndex(item =>
     item.emotion === emotionKey &&
     item.recipeName === recipe.value.methodName
   )
-  
+
   if (index !== -1) {
     isFavorite.value = true
   }
@@ -162,7 +162,7 @@ onMounted(async () => {
   const flavorPreference = JSON.parse(flavorData)
 
   recipe.value = await calculateRecipe(emotionText, alcoholIndex, flavorPreference, true)
-  
+
   saveToHistory()
   checkIfFavorite()
 })

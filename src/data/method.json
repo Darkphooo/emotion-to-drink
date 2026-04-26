@@ -1,7 +1,7 @@
 [
   {
     "id": "e1",
-    "name": "shake",
+    "name": "Shake",
     "totalVolume": "120",
     "detail": [
       "Add mt1 → pour into shaker tin",
@@ -17,7 +17,7 @@
   },
   {
     "id": "e2",
-    "name": "stir",
+    "name": "Stir",
     "totalVolume": "120",
     "detail": [
       "Add mt1 → into mixing glass",
@@ -31,7 +31,7 @@
   },
   {
     "id": "e3",
-    "name": "shakeBuild",
+    "name": "Shake + Build",
     "totalVolume": "180",
     "detail": [
       "Add mt1 → into shaker tin",
@@ -48,7 +48,7 @@
   },
   {
     "id": "e4",
-    "name": "stirBuild",
+    "name": "Stir + Build",
     "totalVolume": "180",
     "detail": [
       "Add mt1 → into mixing glass",
