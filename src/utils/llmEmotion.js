@@ -5,49 +5,49 @@ const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 
 const EMOTION_DATA = [
-  { id: 'a1', name: 'cheerful', type: 'positive', note: '愉快、开心' },
-  { id: 'a2', name: 'excited', type: 'positive', note: '兴奋、激动' },
-  { id: 'a3', name: 'relaxed', type: 'positive', note: '放松、轻松' },
-  { id: 'a4', name: 'sad', type: 'negative', note: '悲伤、难过' },
-  { id: 'a5', name: 'frustrated', type: 'negative', note: '沮丧、受挫' },
-  { id: 'a6', name: 'anxious', type: 'negative', note: '焦虑、不安' },
-  { id: 'a7', name: 'content', type: 'neutral', note: '满足、满意' },
-  { id: 'a8', name: 'calm', type: 'neutral', note: '平静、冷静' },
-  { id: 'a9', name: 'balanced', type: 'neutral', note: '平衡、均衡' },
-  { id: 'a10', name: 'conflicted', type: 'complex', note: '矛盾、纠结' },
-  { id: 'a11', name: 'adventurous', type: 'complex', note: '冒险、探索' },
-  { id: 'a12', name: 'nostalgic', type: 'complex', note: '怀旧、回忆' }
+  { id: 'a1', name: 'cheerful', type: 'positive', note: 'Happy, cheerful' },
+  { id: 'a2', name: 'excited', type: 'positive', note: 'Excited, enthusiastic' },
+  { id: 'a3', name: 'relaxed', type: 'positive', note: 'Relaxed, easy-going' },
+  { id: 'a4', name: 'sad', type: 'negative', note: 'Sad, upset' },
+  { id: 'a5', name: 'frustrated', type: 'negative', note: 'Frustrated, frustrated' },
+  { id: 'a6', name: 'anxious', type: 'negative', note: 'Anxious, nervous' },
+  { id: 'a7', name: 'content', type: 'neutral', note: 'Content, satisfied' },
+  { id: 'a8', name: 'calm', type: 'neutral', note: 'Calm, composed' },
+  { id: 'a9', name: 'balanced', type: 'neutral', note: 'Balanced, even' },
+  { id: 'a10', name: 'conflicted', type: 'complex', note: 'Conflicted, torn' },
+  { id: 'a11', name: 'adventurous', type: 'complex', note: 'Adventurous, exploring' },
+  { id: 'a12', name: 'nostalgic', type: 'complex', note: 'Nostalgic, remembering' }
 ];
 
 const EMOTIONAL_COMBINATIONS = [
-  { id: 'b1', primary: 'a4', secondary: 'a10', note: '情绪低落、内在拉扯' },
-  { id: 'b2', primary: 'a5', secondary: 'a10', note: '受挫、矛盾' },
-  { id: 'b3', primary: 'a6', secondary: 'a10', note: '焦虑、不确定' },
-  { id: 'b4', primary: 'a4', secondary: 'a12', note: '怀旧偏伤感' },
-  { id: 'b5', primary: 'a2', secondary: 'a11', note: '兴奋、想尝试' },
-  { id: 'b6', primary: 'a1', secondary: 'a11', note: '愉快、探索' },
-  { id: 'b7', primary: 'a3', secondary: 'a11', note: '轻松状态下的冒险' },
-  { id: 'b8', primary: 'a3', secondary: 'a12', note: '放松、温和回忆' },
-  { id: 'b9', primary: 'a7', secondary: 'a10', note: '表面满足、内在纠结' },
-  { id: 'b10', primary: 'a9', secondary: 'a10', note: '理性平衡、拉扯' },
-  { id: 'b11', primary: 'a7', secondary: 'a11', note: '稳定状态下想尝试' },
-  { id: 'b12', primary: 'a8', secondary: 'a12', note: '平静、回忆' },
-  { id: 'b13', primary: 'a7', secondary: 'a12', note: '满足、怀旧' }
+  { id: 'b1', primary: 'a4', secondary: 'a10', note: 'Emotional low, internal pull' },
+  { id: 'b2', primary: 'a5', secondary: 'a10', note: 'Frustrated, conflicted' },
+  { id: 'b3', primary: 'a6', secondary: 'a10', note: 'Anxious, uncertain state' },
+  { id: 'b4', primary: 'a4', secondary: 'a12', note: 'Nostalgic, remembering' },
+  { id: 'b5', primary: 'a2', secondary: 'a11', note: 'Excited, trying' },
+  { id: 'b6', primary: 'a1', secondary: 'a11', note: 'Happy, exploring' },
+  { id: 'b7', primary: 'a3', secondary: 'a11', note: 'Relaxed, adventurous' },
+  { id: 'b8', primary: 'a3', secondary: 'a12', note: 'Relaxed, remembering' },
+  { id: 'b9', primary: 'a7', secondary: 'a10', note: 'Surface satisfaction, internal conflict' },
+  { id: 'b10', primary: 'a9', secondary: 'a10', note: 'Balanced, internal pull' },
+  { id: 'b11', primary: 'a7', secondary: 'a11', note: 'Stable, trying' },
+  { id: 'b12', primary: 'a8', secondary: 'a12', note: 'Calm, remembering' },
+  { id: 'b13', primary: 'a7', secondary: 'a12', note: 'Content, nostalgic' }
 ];
 
 const EMOTION_KEYWORDS = {
-  a1: ['开心', '快乐', '愉快', '高兴', '欢乐', '喜悦', '欢快', '兴奋'],
-  a2: ['兴奋', '激动', '热情', '高涨', '蓬勃', '精力充沛'],
-  a3: ['放松', '轻松', '悠闲', '自在', '舒适', '悠闲自得'],
-  a4: ['悲伤', '难过', '伤心', '沮丧', '低落', '郁闷', '忧郁'],
-  a5: ['受挫', '沮丧', '挫败', '失望', '气馁', '无奈'],
-  a6: ['焦虑', '不安', '紧张', '担心', '忧虑', '忐忑'],
-  a7: ['满足', '满意', '知足', '惬意', '幸福', '美满'],
-  a8: ['平静', '冷静', '淡定', '从容', '安宁', '静心'],
-  a9: ['平衡', '均衡', '稳定', '协调', '和谐'],
-  a10: ['矛盾', '纠结', '冲突', '挣扎', '犹豫', '矛盾重重'],
-  a11: ['冒险', '探索', '尝试', '新鲜', '好奇', '跃跃欲试'],
-  a12: ['怀旧', '回忆', '往事', '怀念', '感慨']
+  a1: ['cheerful', 'happy', 'joyful', 'lively', 'excited'],
+  a2: ['excited', 'excited', 'energetic', 'high-spirited', 'vibrant', 'full of energy'],
+  a3: ['relaxed', 'easy-going', 'comfort', 'comfortable', 'free'],
+  a4: ['sad', 'upset', 'heartbroken', 'depressed', 'down', 'gloomy', 'melancholic'],
+  a5: ['frustrated', 'discouraged', 'defeated', 'disappointed', 'dismayed', 'helpless'],
+  a6: ['anxious', 'uneasy', 'tense', 'worried', 'apprehensive', 'nervous'],
+  a7: ['satisfaction', 'contentment', 'content', 'pleasure', 'happiness', 'fulfillment'],
+  a8: ['calm', 'composure', 'poise', 'ease', 'peace', 'tranquility'],
+  a9: ['balance', 'equilibrium', 'stability', 'coordination', 'harmony'],
+  a10: ['contradiction', 'conflict', 'struggle', 'hesitation', 'full of contradictions'],
+  a11: ['adventure', 'exploration', 'attempt', 'novelty', 'curiosity', 'eager to try'],
+  a12: ['nostalgia', 'memories', 'the past', 'longing', 'reflection']
 };
 
 function buildPrompt(userText) {
@@ -59,29 +59,29 @@ function buildPrompt(userText) {
     return `${c.id}: ${primary.name} + ${secondary.name} (${c.note})`;
   }).join('\n');
 
-  return `## 情绪识别与 ID 匹配专家
+  return `## Expert in Sentiment Analysis and ID Matching
 
-**角色任务：**
-你是一个精通语义分析与情绪识别的专家。你需要根据我提供的文本内容，从给定的两组情绪数据中识别出最匹配的情绪，并仅返回其对应的 ID。
+**Role and Tasks:**
+You are an expert in semantic analysis and sentiment analysis. Based on the text I provide, you need to identify the most relevant sentiment from the two given sets of sentiment data and return only its corresponding ID.
 
-**输入数据：**
+**Input Data:**
 
-1. **待分析文本：** ${userText}
-2. **复合情绪数据集 (Compound Emotions)：** ${combinationList}
-3. **单个情绪数据集 (Single Emotions)：** ${emotionList}
+1. **Text to be analyzed:** ${userText}
+2. **Compound Emotions Dataset:** ${combinationList}
+3. **Single Emotions Dataset:** ${emotionList}
 
-**识别逻辑（优先级）：**
+**Recognition Logic (Priority):**
 
-1. **第一优先级：** 检索【复合情绪数据集】。如果文本表达的情绪符合该集合中的任意项，请选择该情绪。
-2. **第二优先级：** 若在【复合情绪数据集】中未找到匹配项，则检索【单个情绪数据集】。
-3. **匹配准则：** 请基于语义理解选择最契合文本核心情感的条目。
+1. **First Priority:** Search the 【Compound Emotions】 dataset. If the emotion expressed in the text matches any entry in this dataset, select that emotion.
+2. **Second Priority:** If no match is found in the 【Compound Emotions】 dataset, search the 【Single Emotions】 dataset.
+3. **Matching Criteria:** Select the entry that best aligns with the core sentiment of the text based on semantic understanding.
 
-**输出规范（严禁违背）：**
+**Output Specifications (Strictly Enforced):**
 
-* **只返回 ID**：不要包含任何解释，分析、标点符号或前导字符（如 "ID: "）。只需要返回 emotionId，例如 "a1" 或 "b2"。
-* **无匹配结果：** 如果两组数据均无法匹配，请返回 "a7"。
+* **Return Only the ID**: Do not include any explanations, analysis, punctuation, or leading characters (such as 'ID: '). Return only the emotionId, e.g., 'a1' or 'b2'.
+* **No Matches Found:** If neither dataset matches, return 'a7'.
 
-在检查【单个情绪数据集】之前，请务必深度解析文本是否包含【复合情绪数据集】中所描述的多种情感交织特征。`;
+Before checking the [Single Emotion Dataset], be sure to thoroughly analyze the text to determine whether it contains the characteristics of intertwined emotions described in the [Composite Emotion Dataset].`;
 }
 
 export async function matchEmotionWithGLM(userText) {
@@ -112,7 +112,7 @@ export async function matchEmotionWithGLM(userText) {
 
     return fallbackMatch(userText);
   } catch (error) {
-    console.error('Gemini API调用失败:', error);
+    console.error('Gemini API Failed:', error);
     return fallbackMatch(userText);
   }
 }

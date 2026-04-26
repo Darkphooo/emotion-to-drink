@@ -5,7 +5,7 @@
       "primary": "a4",
       "secondary": "a10"
     },
-    "note": "情绪低落、内在拉扯"
+    "note": "Low mood, inner tension"
   },
   {
     "id": "b2",
@@ -13,7 +13,7 @@
       "primary": "a5",
       "secondary": "a10"
     },
-    "note": "受挫、矛盾"
+    "note": "Frustrated, conflicted"
   },
   {
     "id": "b3",
@@ -21,7 +21,7 @@
       "primary": "a6",
       "secondary": "a10"
     },
-    "note": "焦虑、不确定"
+    "note": "Anxious, uncertain"
   },
   {
     "id": "b4",
@@ -29,7 +29,7 @@
       "primary": "a4",
       "secondary": "a12"
     },
-    "note": "怀旧偏伤感"
+    "note": "Nostalgic with a sad undertone"
   },
   {
     "id": "b5",
@@ -37,7 +37,7 @@
       "primary": "a2",
       "secondary": "a11"
     },
-    "note": "兴奋、想尝试"
+    "note": "Excited, eager to try"
   },
   {
     "id": "b6",
@@ -45,7 +45,7 @@
       "primary": "a1",
       "secondary": "a11"
     },
-    "note": "愉快、探索"
+    "note": "Cheerful, exploratory"
   },
   {
     "id": "b7",
@@ -53,7 +53,7 @@
       "primary": "a3",
       "secondary": "a11"
     },
-    "note": "轻松状态下的冒险"
+    "note": "Adventurous while relaxed"
   },
   {
     "id": "b8",
@@ -61,7 +61,7 @@
       "primary": "a3",
       "secondary": "a12"
     },
-    "note": "放松、温和回忆"
+    "note": "Relaxed, gentle reminiscence"
   },
   {
     "id": "b9",
@@ -69,7 +69,7 @@
       "primary": "a7",
       "secondary": "a10"
     },
-    "note": "表面满足、内在纠结"
+    "note": "Outwardly content, internally conflicted"
   },
   {
     "id": "b10",
@@ -77,7 +77,7 @@
       "primary": "a9",
       "secondary": "a10"
     },
-    "note": "理性平衡、拉扯"
+    "note": "Rationally balanced, pulled in different directions"
   },
   {
     "id": "b11",
@@ -85,7 +85,7 @@
       "primary": "a7",
       "secondary": "a11"
     },
-    "note": "稳定状态下想尝试"
+    "note": "Stable, but wanting to try something new"
   },
   {
     "id": "b12",
@@ -93,7 +93,7 @@
       "primary": "a8",
       "secondary": "a12"
     },
-    "note": "平静、回忆"
+    "note": "Calm, reminiscent"
   },
   {
     "id": "b13",
@@ -101,6 +101,6 @@
       "primary": "a7",
       "secondary": "a12"
     },
-    "note": "满足、怀旧"
+    "note": "Content, nostalgic"
   }
 ]

@@ -1,25 +1,17 @@
 <template>
   <div class="page-container fixed-height">
-    <h1 class="page-title glow-title">今晚，你希望这杯酒陪你走进什么样的片刻？</h1>
+    <h1 class="page-title glow-title">Tonight, what kind of moment would you like this drink to accompany you into?</h1>
 
     <div class="input-area">
-      <textarea
-        v-model="emotionText"
-        class="emotion-input diary-page"
-        placeholder="写下此刻的状态，而不是你想喝什么..."
-        @input="handleInput"
-      ></textarea>
+      <textarea v-model="emotionText" class="emotion-input diary-page"
+        placeholder="Write down how you're feeling right now, not what you want to drink..."
+        @input="handleInput"></textarea>
     </div>
 
     <div class="inspiration-cards">
-      <p class="inspiration-label">或选择一个灵感</p>
+      <p class="inspiration-label">Or choose an inspiration</p>
       <div class="cards-row">
-        <button
-          v-for="card in inspirationCards"
-          :key="card"
-          class="inspiration-card"
-          @click="selectCard(card)"
-        >
+        <button v-for="card in inspirationCards" :key="card" class="inspiration-card" @click="selectCard(card)">
           {{ card }}
         </button>
       </div>
@@ -27,16 +19,12 @@
 
     <transition name="fade">
       <div v-if="showFeedback" class="feedback-message">
-        收到。我们会围绕这个状态来构建。
+        Got it. We’ll build around this mood.
       </div>
     </transition>
 
-    <button
-      class="btn-primary next-btn"
-      :disabled="!canProceed"
-      @click="handleNext"
-    >
-      下一步
+    <button class="btn-primary next-btn" :disabled="!canProceed" @click="handleNext">
+      Next
     </button>
   </div>
 </template>
@@ -50,11 +38,19 @@ const emotionText = ref('')
 const showFeedback = ref(false)
 
 const inspirationCards = [
-  '想慢一点',
-  '想亮一点',
-  '想有点重量',
-  '想轻轻逃开',
-  '想有人陪'
+  'Want to gently escape',
+  'Want to slow down',
+  'Want something with weight',
+  'Want something brighter',
+  'Want some company',
+  'Want some quiet',
+  'Want more energy',
+  'Want some excitement',
+  'Want the safe comfort of a light buzz',
+  'Want to feel it quickly',
+  'Want time to slow down',
+  'Want to enter my own world',
+  'Want to think about nothing'
 ]
 
 const canProceed = computed(() => {
@@ -70,9 +66,9 @@ function selectCard(text) {
 
 function handleNext() {
   showFeedback.value = true
-  
+
   sessionStorage.setItem('emotionText', emotionText.value)
-  
+
   setTimeout(() => {
     router.push('/alcohol')
   }, 800)
@@ -93,13 +89,14 @@ function handleNext() {
   from {
     text-shadow: 0 0 10px rgba(116, 185, 255, 0.6);
   }
+
   to {
     text-shadow: 0 0 20px rgba(116, 185, 255, 0.8), 0 0 30px rgba(116, 185, 255, 0.4);
   }
 }
 
 .input-area {
-  margin: 24px 0;
+  margin: 22px 0 24px;
 }
 
 .emotion-input {
@@ -145,26 +142,29 @@ function handleNext() {
 }
 
 .cards-row {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 10px;
-  justify-content: center;
 }
 
 .inspiration-card {
-  padding: 10px 16px;
+  min-height: 44px;
+  padding: 10px 14px;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  font-size: 14px;
+  border-radius: 16px;
+  font-size: 13.5px;
+  line-height: 1.25;
   color: rgba(116, 185, 255, 0.9);
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  text-wrap: balance;
 }
 
 .inspiration-card::before {
@@ -211,6 +211,7 @@ function handleNext() {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -222,12 +223,8 @@ function handleNext() {
 }
 
 @media (max-width: 480px) {
-  .sticky-note {
-    max-width: calc(50% - 6px);
-  }
-  
-  .sticky-note.hint {
-    max-width: 100%;
+  .cards-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 </style>

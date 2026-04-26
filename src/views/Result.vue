@@ -1,41 +1,49 @@
 <template>
   <div class="page-container">
     <div v-if="!recipe" class="loading">
-      正在计算配方...
+      Calculating the recipe...
     </div>
     <div v-else class="result-card">
-      <h1 class="result-title">调酒配方</h1>
-      <p class="result-description">根据您的心情和偏好为您推荐</p>
+      <h1 class="result-title">Cocktail Recipe</h1>
+      <p class="result-description">Recommended based on your mood and preferences</p>
 
       <div class="result-stats">
         <div class="stat-item">
-          <span class="stat-label">酒精度</span>
+          <span class="stat-label">ABV</span>
           <span class="stat-value">{{ recipe.alcoholContent }}%</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">总量</span>
+          <span class="stat-label">Total Volume</span>
           <span class="stat-value">{{ recipe.totalVolume }}ml</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">制作方法</span>
+          <span class="stat-label">Method</span>
           <span class="stat-value">{{ recipe.methodName }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Glass Type</span>
+          <span class="stat-value">{{ glassType?.name }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Ice type</span>
+          <span class="stat-value">{{ iceType?.name }}</span>
         </div>
       </div>
 
       <div class="ingredients-section">
-        <h2 class="section-title">配方原料</h2>
+        <h2 class="section-title">Ingredients</h2>
         <ul class="ingredients-list">
           <li v-for="(ing, id) in recipe.materials" :key="id" class="ingredient-item">
             <span class="ingredient-name">{{ ing.name }}</span>
             <span class="ingredient-amount">
-              {{ ing.volume }}{{ ing.unit === '滴' ? '滴' : 'ml' }}
+              {{ ing.volume }}{{ ing.unit === 'drop' ? 'drop' : 'ml' }}
             </span>
           </li>
         </ul>
       </div>
 
       <div class="method-section">
-        <h2 class="section-title">制作说明</h2>
+        <h2 class="section-title">Instructions</h2>
         <ol class="method-steps">
           <li v-for="(step, index) in recipe.detail" :key="index">
             {{ step }}
@@ -44,31 +52,31 @@
       </div>
 
       <div class="flavor-section">
-        <h2 class="section-title">口感特征</h2>
+        <h2 class="section-title">Taste Profile</h2>
         <div class="flavor-bars">
           <div class="flavor-bar">
-            <span class="flavor-label">酸</span>
+            <span class="flavor-label">Sour</span>
             <div class="bar-track">
               <div class="bar-fill" :style="{ width: (getTasteLevel(recipe.tasteRatio.sourLevel) / 3 * 100) + '%' }">
               </div>
             </div>
           </div>
           <div class="flavor-bar">
-            <span class="flavor-label">甜</span>
+            <span class="flavor-label">Sweet</span>
             <div class="bar-track">
               <div class="bar-fill" :style="{ width: (getTasteLevel(recipe.tasteRatio.sweetLevel) / 3 * 100) + '%' }">
               </div>
             </div>
           </div>
           <div class="flavor-bar">
-            <span class="flavor-label">苦</span>
+            <span class="flavor-label">Bitter</span>
             <div class="bar-track">
               <div class="bar-fill" :style="{ width: (getTasteLevel(recipe.tasteRatio.bitterLevel) / 3 * 100) + '%' }">
               </div>
             </div>
           </div>
           <div class="flavor-bar">
-            <span class="flavor-label">辣</span>
+            <span class="flavor-label">Spicy</span>
             <div class="bar-track">
               <div class="bar-fill" :style="{ width: (getTasteLevel(recipe.tasteRatio.spicyLevel) / 3 * 100) + '%' }">
               </div>
@@ -79,14 +87,14 @@
 
       <div class="action-buttons">
         <button class="btn-secondary favorite-btn-main" @click="toggleFavorite">
-          <span v-if="!isFavorite">❤️ 收藏到我的最爱</span>
-          <span v-else>💔 取消收藏</span>
+          <span v-if="!isFavorite">❤️ Save to Favorites</span>
+          <span v-else>💔 Remove from Favorites</span>
         </button>
       </div>
     </div>
 
     <button class="btn-primary restart-btn" @click="handleRestart">
-      重新开始
+      Start Again
     </button>
   </div>
 </template>
@@ -100,6 +108,8 @@ const router = useRouter()
 const recipe = ref(null)
 const isFavorite = ref(false)
 const currentHistoryIndex = ref(-1)
+const glassType = ref(null)
+const iceType = ref(null)
 
 function getTasteLevel(level) {
   if (!level) return 0
@@ -110,17 +120,19 @@ function saveToHistory() {
   const emotionText = sessionStorage.getItem('emotionText') || ''
   const alcoholData = sessionStorage.getItem('alcoholLevel')
   const alcoholIndex = alcoholData ? JSON.parse(alcoholData).index : ''
-  
+
   const historyItem = {
     date: new Date().toLocaleString('zh-CN'),
     emotion: emotionText.substring(0, 30) + (emotionText.length > 30 ? '...' : ''),
     recipeName: recipe.value.methodName,
     alcohol: recipe.value.alcoholContent,
     alcoholIndex: alcoholIndex,
+    glassType: glassType.value,
+    iceType: iceType.value,
     recipe: recipe.value,
     favorite: false
   }
-  
+
   const saved = localStorage.getItem('drinkHistory')
   let historyList = saved ? JSON.parse(saved) : []
   historyList.unshift(historyItem)
@@ -131,15 +143,15 @@ function saveToHistory() {
 function toggleFavorite() {
   const savedFavorites = localStorage.getItem('drinkFavorites')
   let favoritesList = savedFavorites ? JSON.parse(savedFavorites) : []
-  
+
   const emotionText = sessionStorage.getItem('emotionText') || ''
   const emotionKey = emotionText.substring(0, 30) + (emotionText.length > 30 ? '...' : '')
   const recipeName = recipe.value.methodName
-  
-  const existingIndex = favoritesList.findIndex(f => 
+
+  const existingIndex = favoritesList.findIndex(f =>
     f.emotion === emotionKey && f.recipeName === recipeName
   )
-  
+
   if (existingIndex !== -1) {
     favoritesList.splice(existingIndex, 1)
     isFavorite.value = false
@@ -147,7 +159,7 @@ function toggleFavorite() {
     const historySaved = localStorage.getItem('drinkHistory')
     const historyList = historySaved ? JSON.parse(historySaved) : []
     const historyItem = historyList.find(h => h.emotion === emotionKey && h.recipeName === recipeName)
-    
+
     if (historyItem) {
       favoritesList.unshift({ ...historyItem, favorite: true })
     } else {
@@ -159,29 +171,31 @@ function toggleFavorite() {
         recipeName: recipeName,
         alcohol: recipe.value.alcoholContent,
         alcoholIndex: alcoholIndex,
+        glassType: glassType.value,
+        iceType: iceType.value,
         recipe: recipe.value,
         favorite: true
       })
     }
     isFavorite.value = true
   }
-  
+
   localStorage.setItem('drinkFavorites', JSON.stringify(favoritesList))
 }
 
 function checkIfFavorite() {
   const savedFavorites = localStorage.getItem('drinkFavorites')
   if (!savedFavorites) return
-  
+
   const favoritesList = JSON.parse(savedFavorites)
   const emotionText = sessionStorage.getItem('emotionText') || ''
   const emotionKey = emotionText.substring(0, 30) + (emotionText.length > 30 ? '...' : '')
-  
-  const index = favoritesList.findIndex(item => 
+
+  const index = favoritesList.findIndex(item =>
     item.emotion === emotionKey &&
     item.recipeName === recipe.value.methodName
   )
-  
+
   if (index !== -1) {
     isFavorite.value = true
   }
@@ -191,17 +205,31 @@ onMounted(async () => {
   const emotionText = sessionStorage.getItem('emotionText') || ''
   const alcoholData = sessionStorage.getItem('alcoholLevel')
   const flavorData = sessionStorage.getItem('flavorPreference')
+  const glassData = sessionStorage.getItem('glassType')
+  const iceData = sessionStorage.getItem('iceType')
 
   if (!emotionText || !alcoholData || !flavorData) {
     router.push('/')
     return
   }
 
+  if (!glassData) {
+    router.push('/glass')
+    return
+  }
+
+  if (!iceData) {
+    router.push('/ice')
+    return
+  }
+
   const alcoholIndex = JSON.parse(alcoholData).index
   const flavorPreference = JSON.parse(flavorData)
+  glassType.value = JSON.parse(glassData)
+  iceType.value = JSON.parse(iceData)
 
   recipe.value = await calculateRecipe(emotionText, alcoholIndex, flavorPreference, true)
-  
+
   saveToHistory()
   checkIfFavorite()
 })
@@ -222,7 +250,7 @@ function handleRestart() {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: var(--border-radius);
-  padding: 24px;
+  padding: clamp(20px, 5vw, 28px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -235,12 +263,14 @@ function handleRestart() {
 }
 
 .result-title {
-  font-size: 28px;
+  font-size: clamp(28px, 7vw, 36px);
   font-weight: 700;
   text-align: center;
   color: #74b9ff;
   margin-bottom: 8px;
   text-shadow: 0 0 15px rgba(116, 185, 255, 0.5);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
 }
 
 .result-description {
@@ -252,8 +282,9 @@ function handleRestart() {
 }
 
 .result-stats {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 12px;
   padding: 16px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -264,18 +295,30 @@ function handleRestart() {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-height: 70px;
+  padding: 10px 8px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  text-align: center;
 }
 
 .stat-label {
-  font-size: 12px;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.6);
   margin-bottom: 4px;
+  line-height: 1.15;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .stat-value {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: #74b9ff;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .section-title {
@@ -295,7 +338,9 @@ function handleRestart() {
 
 .ingredient-item {
   display: flex;
+  gap: 16px;
   justify-content: space-between;
+  align-items: baseline;
   padding: 10px 0;
   border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
 }
@@ -303,9 +348,12 @@ function handleRestart() {
 .ingredient-name {
   font-size: 15px;
   color: #fff;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .ingredient-amount {
+  flex: 0 0 auto;
   font-size: 15px;
   font-weight: 500;
   color: #a29bfe;
@@ -316,14 +364,16 @@ function handleRestart() {
 }
 
 .method-steps {
-  padding-left: 20px;
+  padding-left: 24px;
 }
 
 .method-steps li {
-  font-size: 14px;
+  padding-left: 4px;
+  font-size: 14.5px;
   color: #fff;
-  margin-bottom: 6px;
-  line-height: 1.4;
+  margin-bottom: 10px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
 }
 
 .flavor-section {
@@ -342,7 +392,7 @@ function handleRestart() {
 }
 
 .flavor-label {
-  width: 30px;
+  width: 48px;
   font-size: 13px;
   color: rgba(255, 255, 255, 0.6);
 }
@@ -378,6 +428,7 @@ function handleRestart() {
   border-radius: var(--border-radius);
   color: #fff;
   font-size: 14px;
+  line-height: 1.25;
   cursor: pointer;
   transition: all 0.3s ease;
 }

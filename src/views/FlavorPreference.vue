@@ -1,26 +1,17 @@
 <template>
   <div class="page-container fixed-height">
-    <h1 class="page-title">这杯酒，你希望哪种味道更明显一点？</h1>
+    <h1 class="page-title">Which flavor would you like to be more noticeable in this drink?</h1>
     <p class="page-subtitle">
-      点击选择主要口味，点击右上角 × 划掉不想要的口味。
+      Tap to select the main flavor
     </p>
 
     <div class="flavor-cards">
-      <div
-        v-for="flavor in flavorOptions"
-        :key="flavor.id"
-        class="flavor-card"
-        :class="{
-          'selected': selectedMain === flavor.id,
-          'crossed': crossedFlavors.includes(flavor.id)
-        }"
-        @click="handleCardClick(flavor.id)"
-      >
-        <button
-          v-if="selectedMain !== flavor.id && !crossedFlavors.includes(flavor.id)"
-          class="cross-btn"
-          @click.stop="handleCross(flavor.id)"
-        >
+      <div v-for="flavor in flavorOptions" :key="flavor.id" class="flavor-card" :class="{
+        'selected': selectedMain === flavor.id,
+        'crossed': crossedFlavors.includes(flavor.id)
+      }" @click="handleCardClick(flavor.id)">
+        <button v-if="selectedMain !== flavor.id && !crossedFlavors.includes(flavor.id)" class="cross-btn"
+          @click.stop="handleCross(flavor.id)">
           ×
         </button>
         <span class="flavor-emoji">{{ flavor.emoji }}</span>
@@ -28,16 +19,15 @@
       </div>
     </div>
 
+    <p class="page-subtitle">
+      Tap the top-right × to remove flavors you don’t want
+    </p>
+
     <div v-if="selectedMain" class="intensity-section">
-      <p class="intensity-label">选择强度</p>
+      <p class="intensity-label">Choose Intensity</p>
       <div class="intensity-options">
-        <button
-          v-for="level in intensityLevels"
-          :key="level.id"
-          class="intensity-btn"
-          :class="{ 'intensity-selected': selectedIntensity === level.id }"
-          @click="selectedIntensity = level.id"
-        >
+        <button v-for="level in intensityLevels" :key="level.id" class="intensity-btn"
+          :class="{ 'intensity-selected': selectedIntensity === level.id }" @click="selectedIntensity = level.id">
           <span class="intensity-text">{{ level.text }}</span>
           <span class="intensity-desc">{{ level.desc }}</span>
         </button>
@@ -46,30 +36,22 @@
 
     <transition name="fade">
       <div v-if="showWarning" class="warning-message">
-        这杯酒需要一点酸或甜来保持结构。
+        This wine needs a touch of acidity or sweetness to maintain its structure.
       </div>
     </transition>
 
     <div class="secondary-input">
-      <p class="secondary-label">如果你还想这杯酒突出某种口味，请选择！</p>
+      <p class="secondary-label">If you'd like this drink to highlight another flavor, choose one below!</p>
       <div class="secondary-options">
-        <button
-          v-for="option in secondaryOptions"
-          :key="option.id"
-          class="secondary-btn"
-          :class="{ 'secondary-selected': selectedSecondary === option.id }"
-          @click="selectedSecondary = option.id"
-        >
+        <button v-for="option in secondaryOptions" :key="option.id" class="secondary-btn"
+          :class="{ 'secondary-selected': selectedSecondary === option.id }" @click="selectedSecondary = option.id">
           {{ option.text }}
         </button>
       </div>
     </div>
 
-    <button
-      class="btn-primary next-btn"
-      @click="handleNext"
-    >
-      完成
+    <button class="btn-primary next-btn" @click="handleNext">
+      Next
     </button>
   </div>
 </template>
@@ -81,23 +63,23 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const flavorOptions = [
-  { id: 'sour', emoji: '🍋', text: '偏酸一点' },
-  { id: 'sweet', emoji: '🍯', text: '偏甜一点' },
-  { id: 'bitter', emoji: '🌿', text: '偏苦一点' },
-  { id: 'spicy', emoji: '🌶', text: '偏辣一点' }
+  { id: 'sour', emoji: '🍋', text: 'Sour' },
+  { id: 'sweet', emoji: '🍯', text: 'Sweet' },
+  { id: 'bitter', emoji: '🌿', text: 'Bitter' },
+  { id: 'spicy', emoji: '🌶', text: 'Spicy' }
 ]
 
 const intensityLevels = [
-  { id: 'h1', text: '轻微', desc: '一点点味道' },
-  { id: 'h2', text: '适中', desc: '明显但不强烈' },
-  { id: 'h3', text: '强烈', desc: '明显的味道' }
+  { id: 'h1', text: 'Light', desc: 'Just a hint' },
+  { id: 'h2', text: 'Medium', desc: 'Noticeable but not strong' },
+  { id: 'h3', text: 'Strong', desc: 'Bold flavor' }
 ]
 
 const secondaryOptions = [
-  { id: 'sour', text: '酸' },
-  { id: 'sweet', text: '甜' },
-  { id: 'bitter', text: '苦' },
-  { id: 'spicy', text: '辣' }
+  { id: 'sour', text: 'Sour' },
+  { id: 'sweet', text: 'Sweet' },
+  { id: 'bitter', text: 'Bitter' },
+  { id: 'spicy', text: 'Spicy' }
 ]
 
 const selectedMain = ref(null)
@@ -111,7 +93,7 @@ function handleCardClick(flavorId) {
     handleUncross(flavorId)
     return
   }
-  
+
   if (selectedMain.value === flavorId) {
     selectedMain.value = null
   } else {
@@ -121,10 +103,10 @@ function handleCardClick(flavorId) {
 
 function handleCross(flavorId) {
   if (selectedMain.value === flavorId) return
-  
+
   if (!crossedFlavors.value.includes(flavorId)) {
     const newCrossed = [...crossedFlavors.value, flavorId]
-    
+
     if (newCrossed.includes('sour') && newCrossed.includes('sweet')) {
       showWarning.value = true
       setTimeout(() => {
@@ -132,7 +114,7 @@ function handleCross(flavorId) {
       }, 2000)
       return
     }
-    
+
     crossedFlavors.value = newCrossed
   }
 }
@@ -163,15 +145,15 @@ function handleNext() {
     bitter: 0,
     spicy: 0
   }
-  
+
   if (selectedMain.value) {
     flavorLevels[selectedMain.value] = 3
   }
-  
+
   crossedFlavors.value.forEach(id => {
     flavorLevels[id] = 0
   })
-  
+
   if (selectedSecondary.value) {
     const tasteMap = { sour: 'sour', sweet: 'sweet', bitter: 'bitter', spicy: 'spicy' }
     const tasteKey = tasteMap[selectedSecondary.value]
@@ -179,20 +161,20 @@ function handleNext() {
       flavorLevels[tasteKey] = Math.min(flavorLevels[tasteKey] + 1, 3)
     }
   }
-  
+
   if (flavorLevels.sour === 0 && flavorLevels.sweet === 0) {
     flavorLevels.sour = 1
     flavorLevels.sweet = 1
   }
-  
+
   sessionStorage.setItem('flavorPreference', JSON.stringify({
     primaryTasteId: selectedMain.value ? (selectedMain.value === 'sour' ? 't1' : selectedMain.value === 'sweet' ? 't2' : selectedMain.value === 'bitter' ? 't3' : 't4') : 't1',
     secondaryTasteId: getSecondaryTasteId(selectedSecondary.value),
     refuseTasteIds: crossedFlavors.value.map(f => f === 'sour' ? 't1' : f === 'sweet' ? 't2' : f === 'bitter' ? 't3' : 't4'),
     tasteLevelId: selectedIntensity.value
   }))
-  
-  router.push('/result')
+
+  router.push('/glass')
 }
 </script>
 
@@ -255,7 +237,10 @@ function handleNext() {
 
 .flavor-text {
   font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
   color: #fff;
+  text-align: center;
 }
 
 .cross-btn {
@@ -309,7 +294,8 @@ function handleNext() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 12px 8px;
+  min-height: 76px;
+  padding: 12px 10px;
   background: rgba(27, 39, 53, 0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -344,6 +330,9 @@ function handleNext() {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.6);
   margin-top: 4px;
+  line-height: 1.25;
+  text-align: center;
+  text-wrap: balance;
 }
 
 .secondary-input {
@@ -354,6 +343,9 @@ function handleNext() {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.6);
   margin-bottom: 8px;
+  line-height: 1.45;
+  text-align: center;
+  text-wrap: balance;
 }
 
 .secondary-options {
@@ -370,6 +362,8 @@ function handleNext() {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--border-radius);
   font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
   color: #fff;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -393,5 +387,12 @@ function handleNext() {
 
 .next-btn {
   margin-top: auto;
+}
+
+@media (max-width: 420px) {
+  .intensity-options {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
 }
 </style>

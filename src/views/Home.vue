@@ -11,12 +11,14 @@
     <div class="main-content">
       <div class="title-section">
         <h1 class="main-title">Emotion to Drink</h1>
-        <p class="subtitle">发现属于你的完美配方</p>
+        <p class="subtitle">Discover your perfect recipe</p>
       </div>
 
       <div class="start-button-container">
         <svg class="blob-shape" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <path class="blob-path" d="M47.5,-57.2C59.9,-47.3,67.5,-31.1,71.1,-13.6C74.7,3.9,74.3,22.7,66.1,37.2C57.9,51.7,42,61.9,24.8,67.1C7.6,72.3,-10.9,72.5,-27.2,65.6C-43.5,58.7,-57.6,44.7,-65.4,27.5C-73.2,10.3,-74.7,-10.1,-68.1,-27.3C-61.5,-44.5,-46.8,-58.5,-30.2,-67.1C-13.6,-75.7,4.9,-78.9,21.8,-74.4C38.7,-69.9,54,-57.8,47.5,-57.2Z" transform="translate(100 100)" />
+          <path class="blob-path"
+            d="M47.5,-57.2C59.9,-47.3,67.5,-31.1,71.1,-13.6C74.7,3.9,74.3,22.7,66.1,37.2C57.9,51.7,42,61.9,24.8,67.1C7.6,72.3,-10.9,72.5,-27.2,65.6C-43.5,58.7,-57.6,44.7,-65.4,27.5C-73.2,10.3,-74.7,-10.1,-68.1,-27.3C-61.5,-44.5,-46.8,-58.5,-30.2,-67.1C-13.6,-75.7,4.9,-78.9,21.8,-74.4C38.7,-69.9,54,-57.8,47.5,-57.2Z"
+            transform="translate(100 100)" />
         </svg>
         <button class="start-btn" @click="handleStart">
           Start Mixing
@@ -31,34 +33,22 @@
           <button class="close-btn" @click="showLibrary = false">×</button>
         </div>
         <div class="library-tabs">
-          <button 
-            class="tab-btn" 
-            :class="{ active: activeTab === 'favorites' }"
-            @click="activeTab = 'favorites'"
-          >
-            ❤️ 我的最爱
+          <button class="tab-btn" :class="{ active: activeTab === 'favorites' }" @click="activeTab = 'favorites'">
+            ❤️ My Favorites
           </button>
-          <button 
-            class="tab-btn" 
-            :class="{ active: activeTab === 'history' }"
-            @click="activeTab = 'history'"
-          >
-            📚 历史记录
+          <button class="tab-btn" :class="{ active: activeTab === 'history' }" @click="activeTab = 'history'">
+            📚 History Record
           </button>
         </div>
         <div v-if="currentList.length === 0" class="empty-library">
-          {{ activeTab === 'favorites' ? '暂无收藏' : '暂无历史记录' }}
+          {{ activeTab === 'favorites' ? 'No favorites' : 'No history record' }}
         </div>
         <div v-else class="library-list">
           <div v-for="(item, index) in currentList" :key="index" class="library-item">
             <div class="library-item-header">
               <span class="library-date">{{ item.date }}</span>
               <div class="library-actions">
-                <button 
-                  class="favorite-btn" 
-                  :class="{ active: item.favorite }"
-                  @click="toggleFavorite(index)"
-                >
+                <button class="favorite-btn" :class="{ active: item.favorite }" @click="toggleFavorite(index)">
                   {{ item.favorite ? '❤️' : '🤍' }}
                 </button>
                 <button class="delete-btn" @click="deleteItem(index)">
@@ -67,9 +57,9 @@
               </div>
             </div>
             <div class="library-item-content">
-              <p class="library-emotion">心情：{{ item.emotion }}</p>
-              <p class="library-recipe">配方：{{ item.recipeName }}</p>
-              <p class="library-alcohol">酒精度：{{ item.alcohol }}%</p>
+              <p class="library-emotion">Emotion: {{ item.emotion }}</p>
+              <p class="library-recipe">Recipe: {{ item.recipeName }}</p>
+              <p class="library-alcohol">Alcohol: {{ item.alcohol }}%</p>
             </div>
           </div>
         </div>
@@ -118,7 +108,7 @@ function getParticleStyle(index) {
   const color = particleColors.value[colorIndex]
   const duration = Math.random() * 15 + 15
   const delay = Math.random() * 5
-  
+
   return {
     width: `${size}px`,
     height: `${size}px`,
@@ -236,16 +226,21 @@ onUnmounted(() => {
 }
 
 @keyframes floatParticle {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
     opacity: 0;
   }
+
   10% {
     opacity: 0.8;
   }
+
   90% {
     opacity: 0.8;
   }
+
   100% {
     transform: translate(calc(100vw - 100vw * var(--random-x, 0.5)), calc(100vh - 100vh * var(--random-y, 0.5))) scale(0);
     opacity: 0;
@@ -325,15 +320,20 @@ onUnmounted(() => {
 }
 
 @keyframes blobMorph {
-  0%, 100% {
+
+  0%,
+  100% {
     d: path("M47.5,-57.2C59.9,-47.3,67.5,-31.1,71.1,-13.6C74.7,3.9,74.3,22.7,66.1,37.2C57.9,51.7,42,61.9,24.8,67.1C7.6,72.3,-10.9,72.5,-27.2,65.6C-43.5,58.7,-57.6,44.7,-65.4,27.5C-73.2,10.3,-74.7,-10.1,-68.1,-27.3C-61.5,-44.5,-46.8,-58.5,-30.2,-67.1C-13.6,-75.7,4.9,-78.9,21.8,-74.4C38.7,-69.9,54,-57.8,47.5,-57.2Z");
   }
+
   25% {
     d: path("M55.4,-58.1C69.4,-47.1,77.1,-28.4,77.2,-9.5C77.3,9.4,69.8,28.5,57.2,42.6C44.6,56.7,26.9,65.8,8.1,70.4C-10.7,75,-30.6,75.1,-46.5,66.4C-62.4,57.7,-74.3,40.2,-78.3,21.2C-82.3,2.2,-78.4,-18.3,-68.3,-35.1C-58.2,-51.9,-41.9,-65,-24.2,-72.1C-6.5,-79.2,12.6,-80.3,30.4,-74.8C48.2,-69.3,64.7,-57.2,55.4,-58.1Z");
   }
+
   50% {
     d: path("M44.3,-52.1C56.1,-42.3,63.6,-27.1,67.4,-10.4C71.2,6.3,71.3,24.5,63.4,39.1C55.5,53.7,39.6,64.7,22.2,69.7C4.8,74.7,-14.1,73.7,-30.7,66.6C-47.3,59.5,-61.6,46.3,-69.1,29.8C-76.6,13.3,-77.3,-6.5,-71.3,-23.7C-65.3,-40.9,-52.6,-55.5,-37.7,-64.5C-22.8,-73.5,-5.7,-76.9,8.8,-73.9C23.3,-70.9,38.4,-61.5,44.3,-52.1Z");
   }
+
   75% {
     d: path("M51.1,-60.2C64.4,-49.9,73.3,-33.1,75.6,-15.2C77.9,2.7,73.6,21.7,64.1,37.3C54.6,52.9,39.9,65.1,23.1,70.7C6.3,76.3,-12.6,75.3,-29.3,68.4C-46,61.5,-60.5,48.7,-68.5,32.3C-76.5,15.9,-78,-4,-72.3,-21.5C-66.6,-39,-53.7,-54.1,-38.4,-63.9C-23.1,-73.7,-5.4,-78.2,10.3,-75.6C26,-73,41.8,-63.3,51.1,-60.2Z");
   }
@@ -390,7 +390,7 @@ onUnmounted(() => {
   border-radius: var(--border-radius);
   border: 1px solid rgba(255, 255, 255, 0.1);
   width: 100%;
-  max-width: 500px;
+  max-width: 560px;
   max-height: 80vh;
   overflow: hidden;
   display: flex;
@@ -426,20 +426,21 @@ onUnmounted(() => {
 }
 
 .library-tabs {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   padding: 16px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .tab-btn {
-  flex: 1;
   padding: 10px 16px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   color: rgba(255, 255, 255, 0.6);
   font-size: 14px;
+  line-height: 1.25;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -516,6 +517,8 @@ onUnmounted(() => {
   font-size: 14px;
   color: #fff;
   margin-bottom: 4px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .library-emotion {
@@ -537,19 +540,31 @@ onUnmounted(() => {
   .main-title {
     font-size: 36px;
   }
-  
+
   .subtitle {
     font-size: 16px;
   }
-  
+
   .start-btn {
     padding: 20px 40px;
     font-size: 18px;
   }
-  
+
   .blob-shape {
     width: 240px;
     height: 240px;
+  }
+}
+
+@media (max-width: 420px) {
+  .library-btn {
+    right: 16px;
+    top: 16px;
+    padding: 10px 16px;
+  }
+
+  .library-tabs {
+    grid-template-columns: 1fr;
   }
 }
 </style>

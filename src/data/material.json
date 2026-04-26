@@ -1,7 +1,7 @@
 [
   {
     "id": "d1",
-    "name": "龙舌兰",
+    "name": "Tequila",
     "type": "mt1",
     "method": null,
     "alcohol": "40",
@@ -11,7 +11,7 @@
   },
   {
     "id": "d2",
-    "name": "伏特加",
+    "name": "Vodka",
     "type": "mt1",
     "method": null,
     "alcohol": "40",
@@ -21,7 +21,7 @@
   },
   {
     "id": "d3",
-    "name": "金酒",
+    "name": "Gin",
     "type": "mt1",
     "method": null,
     "alcohol": "40",
@@ -31,7 +31,7 @@
   },
   {
     "id": "d4",
-    "name": "朗姆",
+    "name": "Rum",
     "type": "mt1",
     "method": null,
     "alcohol": "40",
@@ -41,7 +41,7 @@
   },
   {
     "id": "d5",
-    "name": "威士忌",
+    "name": "Whiskey",
     "type": "mt1",
     "method": null,
     "alcohol": "40",
@@ -51,7 +51,7 @@
   },
   {
     "id": "d6",
-    "name": "白兰地",
+    "name": "Brandy",
     "type": "mt1",
     "method": null,
     "alcohol": "40",
@@ -61,7 +61,7 @@
   },
   {
     "id": "d7",
-    "name": "君度",
+    "name": "Cointreau",
     "type": "mt2",
     "method": null,
     "alcohol": "40",
@@ -71,7 +71,7 @@
   },
   {
     "id": "d8",
-    "name": "百利甜",
+    "name": "Baileys",
     "type": "mt2",
     "method": "e1",
     "alcohol": "17",
@@ -81,7 +81,7 @@
   },
   {
     "id": "d9",
-    "name": "金巴利",
+    "name": "Campari",
     "type": "mt2",
     "method": null,
     "alcohol": "25",
@@ -91,7 +91,7 @@
   },
   {
     "id": "d10",
-    "name": "甜苦艾酒",
+    "name": "Sweet Vermouth",
     "type": "mt2",
     "method": null,
     "alcohol": "16",
@@ -101,7 +101,7 @@
   },
   {
     "id": "d11",
-    "name": "黄柠檬汁",
+    "name": "Lemon Juice",
     "type": "mt3",
     "method": "e1",
     "alcohol": "0",
@@ -111,7 +111,7 @@
   },
   {
     "id": "d12",
-    "name": "青柠汁",
+    "name": "Lime Juice",
     "type": "mt3",
     "method": "e1",
     "alcohol": "0",
@@ -121,7 +121,7 @@
   },
   {
     "id": "d13",
-    "name": "原味糖浆",
+    "name": "Simple Syrup",
     "type": "mt3",
     "method": "e1",
     "alcohol": "0",
@@ -131,7 +131,7 @@
   },
   {
     "id": "d14",
-    "name": "红石榴糖浆",
+    "name": "Grenadine",
     "type": "mt3",
     "method": "e1",
     "alcohol": "0",
@@ -141,27 +141,27 @@
   },
   {
     "id": "d15",
-    "name": "辣椒仔",
+    "name": "Chili Juice",
     "type": "mt3",
     "method": null,
     "alcohol": "0",
     "taste": "t4",
     "tasteLevel": "h0",
-    "unit": "滴"
+    "unit": "drop"
   },
   {
     "id": "d16",
-    "name": "苦精",
+    "name": "Bitters",
     "type": "mt3",
     "method": null,
     "alcohol": "0",
     "taste": "t3",
     "tasteLevel": "h0",
-    "unit": "滴"
+    "unit": "drop"
   },
   {
     "id": "d17",
-    "name": "汤力水",
+    "name": "Tonic Water",
     "type": "mt4",
     "method": "e3",
     "alcohol": "0",
@@ -171,7 +171,7 @@
   },
   {
     "id": "d18",
-    "name": "苏打水",
+    "name": "Soda Water",
     "type": "mt4",
     "method": "e3",
     "alcohol": "0",
@@ -181,7 +181,7 @@
   },
   {
     "id": "d19",
-    "name": "可乐",
+    "name": "Cola",
     "type": "mt4",
     "method": "e3",
     "alcohol": "0",
@@ -191,7 +191,7 @@
   },
   {
     "id": "d20",
-    "name": "鲜榨橙汁",
+    "name": "Fresh Orange Juice",
     "type": "mt4",
     "method": "e1",
     "alcohol": "0",
@@ -201,7 +201,7 @@
   },
   {
     "id": "d21",
-    "name": "菠萝汁",
+    "name": "Pineapple Juice",
     "type": "mt4",
     "method": "e1",
     "alcohol": "0",

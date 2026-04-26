@@ -1,25 +1,18 @@
 <template>
   <div class="page-container fixed-height" :class="{ 'page-transition': isTransitioning }">
-    <h1 class="page-title glow-title">今晚，你愿意走到哪一步？</h1>
+    <h1 class="page-title glow-title">Tonight, how far would you like to go?</h1>
     <p class="page-subtitle">
-      不用考虑数字，只选择你能接受的感觉。
+      Don’t think about the numbers—just choose what feels right to you.
     </p>
 
     <div class="options-list">
-      <button
-        v-for="(option, index) in alcoholOptions"
-        :key="index"
-        class="option-card"
-        :class="{ 
-          selected: selectedIndex === index,
-          'other-dimmed': selectedIndex !== null && selectedIndex !== index
-        }"
-        :style="{ 
-          '--progress-color': option.color,
-          '--progress-depth': (index + 1) / alcoholOptions.length 
-        }"
-        @click="selectOption(index)"
-      >
+      <button v-for="(option, index) in alcoholOptions" :key="index" class="option-card" :class="{
+        selected: selectedIndex === index,
+        'other-dimmed': selectedIndex !== null && selectedIndex !== index
+      }" :style="{
+        '--progress-color': option.color,
+        '--progress-depth': (index + 1) / alcoholOptions.length
+      }" @click="selectOption(index)">
         <div class="progress-indicator"></div>
         <span class="option-text">{{ option.text }}</span>
         <span class="option-range">{{ option.range }}</span>
@@ -32,12 +25,8 @@
       </div>
     </transition>
 
-    <button
-      class="btn-primary next-btn"
-      :disabled="selectedIndex === null"
-      @click="handleNext"
-    >
-      下一步
+    <button class="btn-primary next-btn" :disabled="selectedIndex === null" @click="handleNext">
+      Next
     </button>
   </div>
 </template>
@@ -52,17 +41,17 @@ const feedbackMessage = ref('')
 const isTransitioning = ref(false)
 
 const alcoholOptions = [
-  { text: '几乎感觉不到酒精，只是有点味道', range: '5-10%', id: 'g1', color: 'rgba(116, 185, 255, 0.15)' },
-  { text: '微醺刚刚好，还能保持清醒', range: '10-15%', id: 'g2', color: 'rgba(116, 185, 255, 0.25)' },
-  { text: '有明显酒感，但还能控制自己', range: '15-20%', id: 'g3', color: 'rgba(116, 185, 255, 0.35)' },
-  { text: '会有点上头，但我愿意', range: '20-25%', id: 'g4', color: 'rgba(116, 185, 255, 0.45)' }
+  { text: 'Almost no alcohol, just a hint of flavor', range: '5-10%', id: 'g1', color: 'rgba(116, 185, 255, 0.15)' },
+  { text: 'Light buzz, still clear-headed', range: '10-15%', id: 'g2', color: 'rgba(116, 185, 255, 0.25)' },
+  { text: 'Noticeable alcohol, but still in control', range: '15-20%', id: 'g3', color: 'rgba(116, 185, 255, 0.35)' },
+  { text: 'A bit tipsy, and I’m okay with that', range: '20-25%', id: 'g4', color: 'rgba(116, 185, 255, 0.45)' }
 ]
 
 const feedbackMessages = [
-  '好的，我们会让它保持轻盈。',
-  '明白，我们会让它保持在刚刚好的边缘。',
-  '收到，我们会让它有明显的存在感。',
-  '好的，我们会让它更有力量。'
+  'Okay, we\'ll keep it light.',
+  'Got it. We\'ll keep it right on the edge.',
+  'Got it. We\'ll make it have a noticeable presence.',
+  'Okay, we\'ll make it more powerful.'
 ]
 
 function selectOption(index) {
@@ -72,14 +61,14 @@ function selectOption(index) {
 
 function handleNext() {
   isTransitioning.value = true
-  
+
   const selected = alcoholOptions[selectedIndex.value]
   sessionStorage.setItem('alcoholLevel', JSON.stringify({
     index: selected.id,
     text: selected.text,
     range: selected.range
   }))
-  
+
   setTimeout(() => {
     router.push('/flavor')
   }, 600)
@@ -100,6 +89,7 @@ function handleNext() {
   from {
     text-shadow: 0 0 10px rgba(116, 185, 255, 0.6);
   }
+
   to {
     text-shadow: 0 0 20px rgba(116, 185, 255, 0.8), 0 0 30px rgba(116, 185, 255, 0.4);
   }
@@ -114,6 +104,7 @@ function handleNext() {
     opacity: 1;
     transform: translateY(0);
   }
+
   100% {
     opacity: 0;
     transform: translateY(-20px);
@@ -132,6 +123,7 @@ function handleNext() {
   position: relative;
   display: flex;
   align-items: center;
+  gap: 14px;
   padding: 16px 16px 16px 20px;
   background: rgba(27, 39, 53, 0.5);
   backdrop-filter: blur(10px);
@@ -186,17 +178,20 @@ function handleNext() {
 
 .option-text {
   flex: 1;
+  min-width: 0;
   font-size: 15px;
+  line-height: 1.35;
   color: #fff;
   padding-left: 8px;
   transition: all 0.3s ease;
 }
 
 .option-card:hover .option-text {
-  font-size: 15.3px;
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .option-range {
+  flex: 0 0 auto;
   font-size: 13px;
   color: rgba(255, 255, 255, 0.6);
   padding: 4px 10px;
@@ -228,6 +223,7 @@ function handleNext() {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 0.9;
     transform: translateY(0);
@@ -263,5 +259,18 @@ function handleNext() {
 
 .next-btn:active:not(:disabled) {
   transform: translateY(0);
+}
+
+@media (max-width: 420px) {
+  .option-card {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 16px 16px 22px;
+  }
+
+  .option-text {
+    padding-left: 0;
+  }
 }
 </style>

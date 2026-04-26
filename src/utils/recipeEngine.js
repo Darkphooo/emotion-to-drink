@@ -513,7 +513,7 @@ function fillVolume(currentVolume, currentTotalVolume, usedMaterialIds) {
 
 function generateRecipeDetail(methodId, currentMaterialIds, currentVolume) {
   const method = getMethodById(methodId);
-  if (!method) return { detail: [], alcoholContent: 0 };
+  if (!method) return [];
 
   const mt1Materials = currentMaterialIds.filter(id => {
     const m = getMaterialById(id);
@@ -549,29 +549,9 @@ function generateRecipeDetail(methodId, currentMaterialIds, currentVolume) {
     }).join(' + ');
   };
 
-  const detail = [];
-
-  if (mt1Materials.length > 0) {
-    const mt1Str = getMaterialStr('mt1');
-    if (method.id === 'e1' || method.id === 'e3') {
-      detail.push(`加入基酒 → ${mt1Str}，倒入摇壶底部`);
-    } else if (method.id === 'e2' || method.id === 'e4') {
-      detail.push(`加入基酒 → ${mt1Str}，放入调酒杯`);
-    }
-  }
-
-  if (mt2Materials.length > 0) {
-    const mt2Str = getMaterialStr('mt2');
-    detail.push(`加入利口酒 → ${mt2Str}`);
-  }
-
-  if (method.id === 'e1' || method.id === 'e3') {
-    detail.push(`加入冰块 → 3块 方冰`);
-    detail.push(`快速摇晃 → 10-15秒，高频`);
-  } else if (method.id === 'e2' || method.id === 'e4') {
-    detail.push(`加入冰块 → 4块 方冰`);
-    detail.push(`缓慢搅拌 → 20-30秒，单向`);
-  }
+  const mt1Str = getMaterialStr('mt1');
+  const mt2Str = getMaterialStr('mt2');
+  const mt3Str = getMaterialStr('mt3');
 
   const mt4Shake = mt4Materials.filter(id => {
     const m = getMaterialById(id);
@@ -582,61 +562,64 @@ function generateRecipeDetail(methodId, currentMaterialIds, currentVolume) {
     return m && m.method === 'e3';
   });
 
-  if (mt3Materials.length > 0 || mt4Shake.length > 0) {
-    const parts = [];
-    if (mt3Materials.length > 0) parts.push(getMaterialStr('mt3'));
-    if (mt4Shake.length > 0) {
-      const shakeMt4Str = mt4Shake.map(id => {
-        const m = getMaterialById(id);
-        const vol = currentVolume[id] || 0;
-        const unit = m?.unit || 'ml';
-        return `${vol}${unit} ${m.name}`;
-      }).join(' + ');
-      parts.push(shakeMt4Str);
-    }
-    if (parts.length > 0) {
-      detail.push(`加入辅料 → ${parts.join(' + ')}`);
-    }
-  }
+  const shakeMt4Str = mt4Shake.map(id => {
+    const m = getMaterialById(id);
+    const vol = currentVolume[id] || 0;
+    const unit = m?.unit || 'ml';
+    return `${vol}${unit} ${m.name}`;
+  }).join(' + ');
 
-  detail.push(`过滤倒出 → 进入成品杯`);
+  const buildMt4Str = mt4Build.map(id => {
+    const m = getMaterialById(id);
+    const vol = currentVolume[id] || 0;
+    const unit = m?.unit || 'ml';
+    return `${vol}${unit} ${m.name}`;
+  }).join(' + ');
 
-  if ((method.id === 'e3' || method.id === 'e4') && mt4Build.length > 0) {
-    const buildMt4Str = mt4Build.map(id => {
-      const m = getMaterialById(id);
-      const vol = currentVolume[id] || 0;
-      const unit = m?.unit || 'ml';
-      return `${vol}${unit} ${m.name}`;
-    }).join(' + ');
-    detail.push(`加入软饮 → ${buildMt4Str}，轻微搅拌1-2次`);
-  }
+  const mt3AndShakeMt4Str = [mt3Str, shakeMt4Str].filter(Boolean).join(' + ');
 
   const d15Materials = currentMaterialIds.filter(id => id === 'd15');
   const d16Materials = currentMaterialIds.filter(id => id === 'd16');
 
-  if (d15Materials.length > 0 || d16Materials.length > 0) {
-    const parts = [];
-    if (d15Materials.length > 0) {
-      const d15Str = d15Materials.map(id => {
-        const m = getMaterialById(id);
-        const vol = currentVolume[id] || 0;
-        const unit = m?.unit || 'ml';
-        return `${vol}${unit} ${m.name}`;
-      }).join(' + ');
-      parts.push(d15Str);
+  const flavoringStr = [...d15Materials, ...d16Materials].map(id => {
+      const m = getMaterialById(id);
+      const vol = currentVolume[id] || 0;
+      const unit = m?.unit || 'ml';
+      return `${vol}${unit} ${m.name}`;
+  }).join(' + ');
+
+  const replacements = {
+    mt1: mt1Str,
+    mt2: mt2Str,
+    'mt3 and shake mt4': mt3AndShakeMt4Str,
+    'mt3 and mt4': mt3AndShakeMt4Str,
+    'shake mt4': shakeMt4Str,
+    'build mt4': buildMt4Str,
+    mt3: mt3Str,
+    mt4: mt3AndShakeMt4Str || buildMt4Str
+  };
+
+  const detail = [];
+
+  for (const template of method.detail || []) {
+    let step = template;
+
+    if (step.includes('mt1') && !mt1Str) continue;
+    if (step.includes('mt2') && !mt2Str) continue;
+    if ((step.includes('mt3') || step.includes('shake mt4')) && !mt3AndShakeMt4Str) continue;
+    if (step.includes('build mt4') && !buildMt4Str) continue;
+
+    for (const [placeholder, value] of Object.entries(replacements)) {
+      if (value) {
+        step = step.replaceAll(placeholder, value);
+      }
     }
-    if (d16Materials.length > 0) {
-      const d16Str = d16Materials.map(id => {
-        const m = getMaterialById(id);
-        const vol = currentVolume[id] || 0;
-        const unit = m?.unit || 'ml';
-        return `${vol}${unit} ${m.name}`;
-      }).join(' + ');
-      parts.push(d16Str);
-    }
-    if (parts.length > 0) {
-      detail.push(`加入调味 → ${parts.join(' + ')}`);
-    }
+
+    detail.push(step);
+  }
+
+  if (flavoringStr) {
+    detail.push(`Add flavoring → ${flavoringStr}`);
   }
 
   return detail;

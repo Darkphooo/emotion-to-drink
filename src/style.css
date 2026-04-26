@@ -31,6 +31,11 @@ html, body {
   overflow-x: hidden;
 }
 
+button,
+textarea {
+  font: inherit;
+}
+
 body::before {
   content: '';
   position: fixed;
@@ -120,9 +125,9 @@ body::before {
 .page-container {
   flex: 1;
   width: 100%;
-  max-width: 480px;
+  max-width: 560px;
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: 32px clamp(20px, 5vw, 32px);
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -137,24 +142,35 @@ body::before {
 }
 
 .page-title {
-  font-size: 24px;
-  font-weight: 600;
+  max-width: 13em;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(24px, 6vw, 32px);
+  font-weight: 650;
   text-align: center;
   margin-bottom: 8px;
   color: var(--text-primary);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
 }
 
 .page-subtitle {
-  font-size: 14px;
+  max-width: 34em;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 14.5px;
   color: var(--text-secondary);
   text-align: center;
   margin-bottom: 32px;
-  line-height: 1.5;
+  line-height: 1.55;
+  text-wrap: balance;
 }
 
 .btn-primary {
   width: 100%;
-  padding: 16px;
+  min-height: 54px;
+  padding: 15px 18px;
   background: linear-gradient(135deg, rgba(116, 185, 255, 0.8), rgba(162, 155, 254, 0.8));
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -162,12 +178,25 @@ body::before {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--border-radius);
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
   cursor: pointer;
   transition: all var(--transition-speed);
   position: relative;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(116, 185, 255, 0.3);
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding-top: 28px;
+    padding-bottom: 24px;
+  }
+
+  .page-title {
+    max-width: 15em;
+  }
 }
 
 .btn-primary::before {
